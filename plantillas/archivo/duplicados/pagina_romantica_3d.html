@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10051f">
+<title>Para alguien especial ❤️</title>
+<style>
+:root{--pink:#ff6fae;--lav:#d9b8ff;--bg:#090514}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 50% 25%,#32104e 0%,#10051f 48%,#05030d 100%);color:#fff;font-family:Georgia,'Times New Roman',serif;overflow-x:hidden}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main{position:relative;z-index:1}
+section{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:48px 20px;position:relative}
+.card{width:min(680px,100%);padding:clamp(24px,6vw,48px);border:1px solid #ffffff28;border-radius:28px;background:#160b25a8;box-shadow:0 0 55px #c13b9a20;backdrop-filter:blur(9px)}
+.kicker{letter-spacing:.22em;text-transform:uppercase;color:#e8b9ff;font:12px Arial,sans-serif}
+h1{font-size:clamp(2.6rem,9vw,5rem);line-height:1.05;margin:18px 0;background:linear-gradient(120deg,#fff,#ff9dc9,#d6a5ff);color:transparent;background-clip:text}
+h2{font-size:clamp(2rem,7vw,3.3rem);color:#ffc5df;margin:0 0 18px}
+p{font-size:clamp(1.05rem,3.3vw,1.3rem);line-height:1.8;color:#f7eaf8}
+button,.button{border:0;border-radius:999px;padding:14px 23px;background:linear-gradient(100deg,#ff5f9e,#b879ff);color:white;font-weight:bold;font-size:1rem;cursor:pointer;box-shadow:0 8px 30px #ff5f9e35;transition:transform .2s}
+button:hover{transform:translateY(-2px) scale(1.02)}
+.small{font:12px Arial,sans-serif;color:#d4c2e6}
+.heart-wrap{height:300px;display:grid;place-items:center;position:relative;margin:10px auto}
+.heart{font-size:clamp(130px,38vw,230px);line-height:1;filter:drop-shadow(0 0 22px #ff4b9e) drop-shadow(0 0 60px #ba4bff);animation:beat 1.4s infinite;cursor:pointer;user-select:none}
+.orbit{position:absolute;width:270px;height:270px;border:1px solid #e9a6ff50;border-radius:50%;animation:spin 12s linear infinite}
+.orbit:before{content:"✦";position:absolute;top:10px;left:35px;color:#fff1ad;font-size:20px;text-shadow:0 0 18px #fff}
+.orbit.two{width:320px;height:210px;transform:rotate(-35deg);animation-duration:18s}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+@keyframes spin{to{rotate:360deg}}
+.petal{position:fixed;top:-30px;z-index:2;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(650deg);opacity:0}}
+.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0}
+.photo-slot{min-height:120px;border:1px dashed #ffb5da80;border-radius:18px;display:grid;place-items:center;padding:12px;background:#ffffff08;color:#f4c8e4;font:13px Arial,sans-serif}
+.photo-slot input{max-width:100%;font-size:11px}
+.letter{white-space:pre-line;text-align:left;background:#fff8ff0a;border-left:3px solid #ff8bbd;padding:20px;border-radius:0 16px 16px 0}
+footer{padding:24px;text-align:center;color:#bba6ce;font:12px Arial,sans-serif}
+input[type=text],textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #ffffff40;background:#10071d;color:white;margin:7px 0 14px;font:16px Arial,sans-serif}
+textarea{min-height:100px;resize:vertical}
+label{display:block;text-align:left;color:#e8c8e8;font:13px Arial,sans-serif}
+@media(max-width:430px){.orbit{width:220px;height:220px}.orbit.two{width:260px;height:175px}.photo-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<main>
+<section id="inicio">
+<div class="card">
+<div class="kicker">Un pequeño universo para ti</div>
+<h1>Tengo algo<br>especial para ti</h1>
+<p>Hay cosas que las palabras no siempre consiguen explicar…<br>por eso preparé este pequeño rincón de nuestro universo. ✨</p>
+<button onclick="document.querySelector('#corazon').scrollIntoView({behavior:'smooth'}); lluvia()">Abrir mi sorpresa 💌</button>
+<p class="small">Con cariño, para alguien que hace especial la vida.</p>
+</div>
+</section>
+<section id="corazon">
+<div class="card">
+<div class="kicker">En medio de millones de estrellas</div>
+<div class="heart-wrap"><div class="orbit"></div><div class="orbit two"></div><div class="heart" onclick="lluvia()">❤️</div></div>
+<h2>Mi lugar favorito</h2>
+<p>De todos los lugares que existen en el mundo, hay algo que hace que uno sea especial: la persona con quien compartes los momentos.</p>
+<button onclick="document.querySelector('#carta').scrollIntoView({behavior:'smooth'})">Hay algo que quiero decirte ↓</button>
+</div>
+</section>
+<section id="carta">
+<div class="card">
+<div class="kicker">Una carta desde el corazón</div>
+<h2>Para ti 💗</h2>
+<div class="letter" id="cartaTexto">Quizá no siempre encuentre las palabras perfectas para decirte lo importante que eres para mí. Pero quiero que recuerdes algo: tu presencia puede convertir un día normal en uno inolvidable, una sonrisa tuya puede mejorar mi día y cada recuerdo bonito ocupa un lugar especial en mi corazón.
+
+No necesito que todo sea perfecto. Me basta con que sigamos creando momentos sinceros, riendo por cosas pequeñas y acompañándonos también en los días difíciles.
+
+Si pudiera regalarte algo, te regalaría la oportunidad de verte con mis ojos, para que entendieras lo especial que eres.
+
+Gracias por existir y por formar parte de mi historia. ❤️</div>
+<button style="margin-top:22px" onclick="document.querySelector('#sorpresa').scrollIntoView({behavior:'smooth'}); lluvia()">Una última sorpresa ✨</button>
+</div>
+</section>
+<section id="fotos">
+<div class="card">
+<div class="kicker">Nuestros recuerdos</div><h2>Momentos para guardar 📸</h2>
+<p>Agrega tus propias fotos desde el celular. Se mostrarán en esta página mientras la tengas abierta.</p>
+<div class="photo-grid">
+<div class="photo-slot"><label>Foto 1<input type="file" accept="image/*" onchange="verFoto(event,0)"></label><img id="foto0" alt="" style="max-width:100%;max-height:220px;border-radius:12px;display:none"></div>
+<div class="photo-slot"><label>Foto 2<input type="file" accept="image/*" onchange="verFoto(event,1)"></label><img id="foto1" alt="" style="max-width:100%;max-height:220px;border-radius:12px;display:none"></div>
+</div>
+<p class="small">Consejo: para que las fotos aparezcan también en el enlace que compartas, hay que incorporarlas al archivo antes de publicarlo.</p>
+<button onclick="document.querySelector('#sorpresa').scrollIntoView({behavior:'smooth'})">Continuar 💞</button>
+</div>
+</section>
+<section id="sorpresa">
+<div class="card">
+<div class="kicker">Solo para ti</div><h1 style="font-size:clamp(2.5rem,9vw,4.5rem)">Eres mi casualidad favorita</h1>
+<p>Si el universo es infinito, qué suerte la mía de haber coincidido contigo. Que nunca nos falten motivos para sonreír, abrazos que duren un poquito más y sueños que nos hagan caminar juntos.</p>
+<div style="font-size:42px;letter-spacing:8px;margin:24px">💗 ✨ 💗</div>
+<button onclick="lluvia(); document.getElementById('finalMsg').textContent='Esta sorpresa es tuya. Guárdala en tu corazón. ❤️'">Toca aquí para recibir un deseo 💝</button>
+<p id="finalMsg" aria-live="polite"></p>
+<p class="small">Hecho con cariño ❤️</p>
+</div>
+</section>
+<section id="personalizar" style="min-height:auto;padding-top:15px;padding-bottom:55px">
+<div class="card">
+<div class="kicker">Hazla tuya</div><h2>Personalizar la dedicatoria</h2>
+<label>Tu nombre<input id="tuNombre" type="text" placeholder="Escribe tu nombre"></label>
+<label>Su nombre<input id="suNombre" type="text" placeholder="Escribe su nombre"></label>
+<label>Tu mensaje personal<textarea id="mensaje" placeholder="Escribe aquí algo que solo ustedes entiendan…"></textarea></label>
+<button onclick="personalizar()">Aplicar cambios</button>
+<p class="small">Para guardar los cambios de forma permanente en el archivo, edita los textos en el código o vuelve a generarlo con tus datos.</p>
+</div>
+</section>
+</main>
+<footer>Un pequeño universo hecho de estrellas, palabras y cariño. ❤️</footer>
+<audio id="musica" loop preload="none"></audio>
+<script>
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let stars=[];
+function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);stars=Array.from({length:Math.min(180,Math.floor(innerWidth/4))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.5+.3,a:Math.random(),v:Math.random()*.012+.003}))}
+function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(const s of stars){s.a+=s.v;if(s.a>1||s.a<0)s.v*=-1;ctx.globalAlpha=Math.max(.15,s.a);ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;requestAnimationFrame(draw)}
+addEventListener('resize',resize);resize();draw();
+function lluvia(){for(let i=0;i<30;i++){let e=document.createElement('span');e.className='petal';e.textContent=['💗','💖','✨','🌸'][Math.floor(Math.random()*4)];e.style.left=Math.random()*100+'vw';e.style.animationDuration=(3+Math.random()*4)+'s';e.style.fontSize=(14+Math.random()*20)+'px';document.body.appendChild(e);setTimeout(()=>e.remove(),7500)}}
+function verFoto(ev,n){const f=ev.target.files[0];if(!f)return;const img=document.getElementById('foto'+n);img.src=URL.createObjectURL(f);img.style.display='block';}
+function personalizar(){const a=document.getElementById('tuNombre').value.trim(),b=document.getElementById('suNombre').value.trim(),m=document.getElementById('mensaje').value.trim();if(a)document.querySelector('#inicio h1').innerHTML='Para '+b.replace(/[<>&"]/g,'')+'<br>con cariño';if(a)document.querySelector('#inicio .small').textContent='Con cariño, '+a.replace(/[<>&"]/g,'')+' ❤️';if(b)document.querySelector('#sorpresa h1').textContent='Para ti, '+b.replace(/[<>&"]/g,'')+' ❤️';if(m)document.getElementById('cartaTexto').textContent=m;lluvia();}
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+ORGANIZACIÓN DE LA CARPETA DE PLANTILLAS
+========================================
+Actualizado: 2/11/2026
+
+En la raíz quedan:
+  index.html  -> galería de plantillas
+  editor.html -> editor para preparar pedidos
+  LEEME.txt   -> instrucciones del editor
+
+activas/
+  Las 7 plantillas que muestra la galería y usa el editor:
+  arbol.html, espacio.html, polaroids.html, timeline.html,
+  cartas.html, capsula.html, flores.html
+
+nuevas/
+  Plantillas nuevas o versiones mejoradas que aún no están integradas
+  en la galería ni en el editor:
+  corazon.html
+  osito.html
+  galaxia.html
+  universo.html
+  universo_de_nuestro_amor.html
+  huella.html
+  dedicatoria.html
+  romantica.html
+
+archivo/versiones-antiguas/
+  Versiones anteriores, reemplazadas por las de nuevas/:
+  animaci_n_de_coraz_n_3d.html   (anterior a corazon.html)
+  galaxia_de_amor.html           (anterior a galaxia.html)
+  universo_3d_de_amor.html       (anterior a universo.html)
+  gemini-code-1793591759762.html (anterior a huella.html)
+  gemini-code-1793592604656.html (anterior a osito.html)
+
+archivo/duplicados/
+  Copias exactas de otros archivos; no hace falta editarlas:
+  p_gina_rom_ntica_de_dedicatoria.html (igual a nuevas/dedicatoria.html)
+  pagina_romantica_3d.html             (igual a nuevas/romantica.html)
+
+Los enlaces de index.html y las rutas de editor.html ya apuntan a activas/.
+Respaldo previo a esta organización: ../plantillas-backup-2026-11-02.zip

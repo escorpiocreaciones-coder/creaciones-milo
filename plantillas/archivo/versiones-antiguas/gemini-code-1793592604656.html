@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para el Amor de Mi Vida</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #030308;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .font-handwriting {
+            font-family: 'Caveat', cursive;
+        }
+
+        .glow-heart {
+            filter: drop-shadow(0 0 12px #ff2a5f) drop-shadow(0 0 25px #ff2a5f);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col items-center justify-center p-4">
+
+    <!-- Fondo de estrellas canvas -->
+    <canvas id="spaceCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Oso Chibi -->
+    <div class="relative z-10 flex flex-col items-center w-full max-w-lg">
+        <div class="relative mb-6">
+            <svg class="w-28 h-28 md:w-36 md:h-36 animate-float" viewBox="0 0 200 200">
+                <circle cx="65" cy="65" r="22" fill="#e8a87c"/>
+                <circle cx="65" cy="65" r="14" fill="#f7d6c8"/>
+                <circle cx="135" cy="65" r="22" fill="#e8a87c"/>
+                <circle cx="135" cy="65" r="14" fill="#f7d6c8"/>
+                <circle cx="100" cy="100" r="50" fill="#e8a87c"/>
+                <ellipse cx="100" cy="112" rx="22" ry="16" fill="#fff" />
+                <ellipse cx="100" cy="104" rx="8" ry="6" fill="#4a2e2b" />
+                <circle cx="82" cy="92" r="5" fill="#4a2e2b"/>
+                <circle cx="118" cy="92" r="5" fill="#4a2e2b"/>
+                <circle cx="72" cy="102" r="7" fill="#ff9999" opacity="0.6"/>
+                <circle cx="128" cy="102" r="7" fill="#ff9999" opacity="0.6"/>
+                <path d="M 130 115 C 145 105, 155 105, 160 112" stroke="#4a2e2b" stroke-width="6" stroke-linecap="round" fill="none"/>
+                <path d="M 160 112 Q 166 100 172 106 Q 170 118 160 112" fill="#ff4d6d"/>
+            </svg>
+        </div>
+
+        <!-- Canvas interactivo para el trazo de corazón -->
+        <div class="relative w-72 h-72 md:w-80 md:h-80 flex items-center justify-center">
+            <canvas id="heartTraceCanvas" width="320" height="320" class="absolute inset-0 glow-heart"></canvas>
+            
+            <div id="actionContainer" class="z-20 text-center opacity-0 transition-opacity duration-700 pointer-events-none">
+                <button onclick="openModal()" class="pointer-events-auto bg-gradient-to-r from-red-600 to-rose-500 hover:from-red-500 hover:to-rose-400 text-white font-semibold px-6 py-2.5 rounded-full shadow-lg shadow-rose-600/50 transform hover:scale-105 transition active:scale-95 text-sm md:text-base mb-3">
+                    Click aquí ❤️
+                </button>
+                <p class="font-handwriting text-2xl text-rose-200">Eres el amor más bonito de mi vida.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sorpresa -->
+    <div id="surpriseModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500">
+        <div class="bg-gradient-to-b from-red-600 to-red-700 text-white rounded-3xl p-6 md:p-8 max-w-sm w-full relative shadow-2xl text-center border-4 border-red-400 transform scale-90 transition-transform duration-500" id="modalCard">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+            <h2 class="font-handwriting text-4xl md:text-5xl mb-4 text-amber-200">Para el amor de mi vida</h2>
+            
+            <div class="w-36 h-36 mx-auto mb-4 relative flex items-center justify-center">
+                <svg class="w-full h-full" viewBox="0 0 100 100">
+                    <ellipse cx="50" cy="55" rx="30" ry="32" fill="#ffd100"/>
+                    <circle cx="38" cy="40" r="14" fill="#333"/>
+                    <circle cx="62" cy="40" r="14" fill="#333"/>
+                    <circle cx="38" cy="40" r="11" fill="#fff"/>
+                    <circle cx="62" cy="40" r="11" fill="#fff"/>
+                    <path d="M 28 40 Q 38 25 48 40 Q 38 45 28 40" fill="#ff4d6d"/>
+                    <path d="M 52 40 Q 62 25 72 40 Q 62 45 52 40" fill="#ff4d6d"/>
+                    <path d="M 40 68 Q 50 78 60 68" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <p class="text-xs md:text-sm leading-relaxed text-red-100 font-light mb-4">
+                Desde que llegaste a mi vida, todo tiene más sentido. Gracias por cada sonrisa, cada abrazo y cada momento a tu lado. Prometo seguir eligiéndote todos los días. Te amo con todo mi corazón. ❤️
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const spaceCanvas = document.getElementById('spaceCanvas');
+        const ctxSpace = spaceCanvas.getContext('2d');
+        let stars = [];
+
+        function resizeSpace() {
+            spaceCanvas.width = window.innerWidth;
+            spaceCanvas.height = window.innerHeight;
+            stars = Array.from({length: 120}, () => ({
+                x: Math.random() * spaceCanvas.width,
+                y: Math.random() * spaceCanvas.height,
+                size: Math.random() * 2,
+                alpha: Math.random()
+            }));
+        }
+        window.addEventListener('resize', resizeSpace);
+        resizeSpace();
+
+        function renderSpace() {
+            ctxSpace.clearRect(0, 0, spaceCanvas.width, spaceCanvas.height);
+            stars.forEach(s => {
+                s.alpha += (Math.random() - 0.5) * 0.02;
+                s.alpha = Math.max(0.2, Math.min(1, s.alpha));
+                ctxSpace.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+                ctxSpace.beginPath();
+                ctxSpace.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctxSpace.fill();
+            });
+            requestAnimationFrame(renderSpace);
+        }
+        renderSpace();
+
+        const heartCanvas = document.getElementById('heartTraceCanvas');
+        const ctxHeart = heartCanvas.getContext('2d');
+        const actionContainer = document.getElementById('actionContainer');
+
+        function getHeartPoint(t) {
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+            return { x: 160 + x * 7, y: 140 + y * 7 };
+        }
+
+        let progress = 0;
+        function drawHeartAnimation() {
+            if (progress < Math.PI * 2) {
+                progress += 0.04;
+                const pt = getHeartPoint(progress);
+                ctxHeart.fillStyle = '#ff2a5f';
+                ctxHeart.beginPath();
+                ctxHeart.arc(pt.x, pt.y, 4, 0, Math.PI * 2);
+                ctxHeart.fill();
+                requestAnimationFrame(drawHeartAnimation);
+            } else {
+                actionContainer.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+        setTimeout(drawHeartAnimation, 800);
+
+        function openModal() {
+            const modal = document.getElementById('surpriseModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-90');
+            card.classList.add('scale-100');
+            confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('surpriseModal');
+            const card = document.getElementById('modalCard');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+    </script>
+</body>
+</html>

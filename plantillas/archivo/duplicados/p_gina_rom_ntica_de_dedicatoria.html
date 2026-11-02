@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti, Mi Amor - Nuestra Historia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wine: {
+                            800: '#3d081b',
+                            900: '#1e030c',
+                            950: '#0d0106',
+                        },
+                        roseGold: '#e8b4b8',
+                        gold: '#f3e5ab'
+                    },
+                    fontFamily: {
+                        script: ['Great Vibes', 'cursive'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0205;
+            color: #fce7f3;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        /* Ambient Glows */
+        .glow-red {
+            box-shadow: 0 0 35px rgba(225, 29, 72, 0.4);
+        }
+        .glow-gold {
+            box-shadow: 0 0 25px rgba(243, 229, 171, 0.3);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(26, 5, 14, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 114, 182, 0.15);
+        }
+
+        /* Circular Progress for Fingerprint */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.1s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        /* 3D Envelope Animations */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        .envelope {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+        .envelope-flap {
+            transform-origin: top;
+            transition: transform 0.5s ease 0.2s, z-index 0.2s;
+        }
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0106;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #881337;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e11d48;
+        }
+    </style>
+</head>
+<body class="relative text-rose-100 font-sans antialiased">
+
+    <!-- CANVAS 2D DE PÉTALOS Y DESTELLOS DE FONDO -->
+    <canvas id="petalCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- 1. PANTALLA DE BLOQUEO CON SCANNER DE HUELLA -->
+    <div id="lockScreen" class="fixed inset-0 z-50 bg-gradient-to-b from-wine-950 via-[#140209] to-wine-950 flex flex-col items-center justify-center p-6 transition-opacity duration-1000">
+        
+        <div class="text-center mb-10 max-w-sm">
+            <h1 class="font-script text-5xl md:text-6xl text-rose-300 drop-shadow-[0_0_15px_rgba(244,114,182,0.5)] mb-3">
+                Para ti, mi amor
+            </h1>
+            <p class="text-xs uppercase tracking-[0.25em] text-rose-400/80">
+                Acceso Privado & Exclusivo
+            </p>
+        </div>
+
+        <!-- Botón del Scanner de Huella -->
+        <div class="relative flex items-center justify-center">
+            <!-- Anillos pulsantes exteriores -->
+            <div id="pulseRing" class="absolute inset-0 rounded-full border-2 border-rose-500/30 animate-ping opacity-75 pointer-events-none"></div>
+            
+            <div id="fpContainer" class="relative w-36 h-36 rounded-full glass-card border border-rose-500/40 flex items-center justify-center cursor-pointer glow-red touch-none transition-transform duration-300 active:scale-95">
+                
+                <!-- SVG de Progreso Circular -->
+                <svg class="absolute inset-0 w-full h-full" viewBox="0 0 120 120">
+                    <circle class="text-rose-950/60" stroke-width="4" stroke="currentColor" fill="transparent" r="52" cx="60" cy="60" />
+                    <circle id="progressCircle" class="progress-ring__circle text-rose-500" stroke-width="5" stroke-dasharray="326.72" stroke-dashoffset="326.72" stroke-linecap="round" fill="transparent" r="52" cx="60" cy="60" />
+                </svg>
+
+                <!-- Icono de Huella Dactilar -->
+                <i data-lucide="fingerprint" id="fpIcon" class="w-16 h-16 text-rose-400 transition-all duration-300"></i>
+            </div>
+        </div>
+
+        <p id="lockStatus" class="mt-8 text-sm font-light text-rose-200/80 tracking-widest uppercase transition-all">
+            Mantén presionado para desbloquear ♥
+        </p>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL DE LA DEDICATORIA -->
+    <main id="mainContent" class="opacity-0 transition-opacity duration-1000 relative z-10 hidden">
+        
+        <!-- NAVBAR / REPRODUCTOR DE MÚSICA FLOTANTE -->
+        <header class="fixed top-4 left-1/2 -translate-x-1/2 z-40 w-11/12 max-w-md">
+            <div class="glass-card px-4 py-2.5 rounded-full flex items-center justify-between shadow-2xl border border-rose-500/30">
+                <div class="flex items-center gap-3">
+                    <button id="btnPlayPause" class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-600 to-rose-400 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform active:scale-95">
+                        <i data-lucide="play" id="playIcon" class="w-5 h-5 ml-0.5"></i>
+                    </button>
+                    <div class="overflow-hidden">
+                        <p class="text-xs font-semibold text-rose-100 truncate">Nuestra Canción Favorita</p>
+                        <p class="text-[10px] text-rose-300/70 truncate">Historia de Amor • 2026</p>
+                    </div>
+                </div>
+
+                <!-- Ecualizador Simulado -->
+                <div id="audioVisualizer" class="flex items-end gap-1 h-5 px-2 opacity-50">
+                    <span class="w-1 bg-rose-400 rounded-full h-2 transition-all duration-300"></span>
+                    <span class="w-1 bg-rose-400 rounded-full h-4 transition-all duration-300"></span>
+                    <span class="w-1 bg-rose-400 rounded-full h-3 transition-all duration-300"></span>
+                    <span class="w-1 bg-rose-400 rounded-full h-5 transition-all duration-300"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 3. HERO & CONTADOR EN TIEMPO REAL -->
+        <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-12 relative">
+            <span class="px-4 py-1.5 rounded-full bg-rose-950/60 border border-rose-500/30 text-rose-300 text-xs tracking-widest uppercase mb-6 shadow-inner">
+                Juntos desde el primer día
+            </span>
+
+            <h1 class="font-script text-6xl sm:text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-rose-400 to-gold drop-shadow-[0_0_25px_rgba(225,29,72,0.4)] mb-4">
+                Tú y Yo
+            </h1>
+            <p class="text-xs sm:text-sm tracking-[0.3em] uppercase text-rose-300/80 mb-12">
+                Feliz Mes, Mi Amor
+            </p>
+
+            <!-- Grid del Contador de Tiempo -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 w-full max-w-2xl px-2">
+                <div class="glass-card p-4 sm:p-6 rounded-2xl border border-rose-500/20 text-center glow-red">
+                    <span id="cDays" class="block font-bold text-3xl sm:text-5xl text-rose-200">000</span>
+                    <span class="text-[10px] sm:text-xs text-rose-400/80 tracking-widest uppercase mt-1 block">Días</span>
+                </div>
+                <div class="glass-card p-4 sm:p-6 rounded-2xl border border-rose-500/20 text-center glow-red">
+                    <span id="cHours" class="block font-bold text-3xl sm:text-5xl text-rose-200">00</span>
+                    <span class="text-[10px] sm:text-xs text-rose-400/80 tracking-widest uppercase mt-1 block">Horas</span>
+                </div>
+                <div class="glass-card p-4 sm:p-6 rounded-2xl border border-rose-500/20 text-center glow-red">
+                    <span id="cMinutes" class="block font-bold text-3xl sm:text-5xl text-rose-200">00</span>
+                    <span class="text-[10px] sm:text-xs text-rose-400/80 tracking-widest uppercase mt-1 block">Minutos</span>
+                </div>
+                <div class="glass-card p-4 sm:p-6 rounded-2xl border border-rose-500/20 text-center glow-red">
+                    <span id="cSeconds" class="block font-bold text-3xl sm:text-5xl text-rose-200">00</span>
+                    <span class="text-[10px] sm:text-xs text-rose-400/80 tracking-widest uppercase mt-1 block">Segundos</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SECCIÓN DEDICATORIA -->
+        <section class="py-20 px-6 max-w-3xl mx-auto text-center relative">
+            <div class="glass-card p-8 sm:p-12 rounded-3xl border border-rose-500/30 relative overflow-hidden">
+                <div class="absolute -top-12 -left-12 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-rose-500/10 rounded-full blur-2xl"></div>
+                
+                <i data-lucide="quote" class="w-10 h-10 text-rose-400/40 mx-auto mb-4"></i>
+                <h2 class="font-script text-4xl sm:text-5xl text-rose-300 mb-6">Para ti, mi amor</h2>
+                
+                <p class="text-rose-100/90 text-sm sm:text-base leading-relaxed font-light mb-6">
+                    "Este mes volví a confirmar que el tiempo se puede medir en miradas. Que las palabras pueden volverse caricia y que un simple «hola» al amanecer puede sostener el resto del día.<br><br>
+                    Hoy celebro otro mes conmigo, otro pedacito de vida donde sigues apareciendo como mi parte favorita del día."
+                </p>
+                
+                <p class="font-script text-2xl text-gold">Feliz mes, mi amor.</p>
+            </div>
+        </section>
+
+        <!-- 5. GALERÍA DE FOTOS POLAROID (3D Tilt) -->
+        <section class="py-20 px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.2em] text-rose-400 uppercase block mb-2">Nuestras Memorias</span>
+                <h2 class="font-script text-5xl sm:text-6xl text-rose-200">Momentos Inolvidables</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Foto 1 -->
+                <div class="polaroid-card bg-rose-950/80 p-4 pb-6 rounded-2xl border border-rose-500/20 shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                    <div class="h-72 overflow-hidden rounded-xl mb-4 relative group">
+                        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=800&auto=format&fit=crop" alt="La primera vez" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <p class="font-script text-3xl text-center text-rose-200">La primera vez</p>
+                </div>
+
+                <!-- Foto 2 -->
+                <div class="polaroid-card bg-rose-950/80 p-4 pb-6 rounded-2xl border border-rose-500/20 shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                    <div class="h-72 overflow-hidden rounded-xl mb-4 relative group">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop" alt="Aquella tarde" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <p class="font-script text-3xl text-center text-rose-200">Aquella tarde</p>
+                </div>
+
+                <!-- Foto 3 -->
+                <div class="polaroid-card bg-rose-950/80 p-4 pb-6 rounded-2xl border border-rose-500/20 shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                    <div class="h-72 overflow-hidden rounded-xl mb-4 relative group">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" alt="Tus ojos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <p class="font-script text-3xl text-center text-rose-200">Tus ojos</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. LÍNEA DEL TIEMPO (NUESTRA HISTORIA) -->
+        <section class="py-20 px-6 max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-xs tracking-[0.2em] text-rose-400 uppercase block mb-2">Pasos juntos</span>
+                <h2 class="font-script text-5xl sm:text-6xl text-rose-200">Línea del Tiempo</h2>
+            </div>
+
+            <div class="relative border-l-2 border-rose-500/30 ml-4 sm:ml-32 space-y-12">
+                <!-- Hito 1 -->
+                <div class="relative pl-8 group">
+                    <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-rose-500 border-4 border-wine-950 group-hover:scale-125 transition-transform"></div>
+                    <span class="text-xs font-semibold text-rose-400 tracking-widest uppercase block mb-1">Marzo 2025</span>
+                    <h3 class="text-xl font-bold text-rose-100 mb-2">El día que te conocí</h3>
+                    <p class="glass-card p-4 rounded-xl text-sm text-rose-200/80 font-light border border-rose-500/20">
+                        Aquella primera mirada que decidió, sin avisar, que todo iba a cambiar para siempre.
+                    </p>
+                </div>
+
+                <!-- Hito 2 -->
+                <div class="relative pl-8 group">
+                    <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-rose-500 border-4 border-wine-950 group-hover:scale-125 transition-transform"></div>
+                    <span class="text-xs font-semibold text-rose-400 tracking-widest uppercase block mb-1">Mayo 2025</span>
+                    <h3 class="text-xl font-bold text-rose-100 mb-2">Nuestra primera cita</h3>
+                    <p class="glass-card p-4 rounded-xl text-sm text-rose-200/80 font-light border border-rose-500/20">
+                        Café, lluvia tímida y dos horas que se sintieron como apenas dos minutos.
+                    </p>
+                </div>
+
+                <!-- Hito 3 -->
+                <div class="relative pl-8 group">
+                    <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-rose-500 border-4 border-wine-950 group-hover:scale-125 transition-transform"></div>
+                    <span class="text-xs font-semibold text-rose-400 tracking-widest uppercase block mb-1">Agosto 2025</span>
+                    <h3 class="text-xl font-bold text-rose-100 mb-2">Te dije que te amaba</h3>
+                    <p class="glass-card p-4 rounded-xl text-sm text-rose-200/80 font-light border border-rose-500/20">
+                        Sin ensayo, sin escenario. Solo tú y yo, con la certeza absoluta de que ya era tarde para callarlo.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. CARTA INTERACTIVA VINTAGE -->
+        <section class="py-20 px-6 max-w-xl mx-auto text-center">
+            <span class="text-xs tracking-[0.2em] text-rose-400 uppercase block mb-2">Una Carta Especial</span>
+            <h2 class="font-script text-5xl sm:text-6xl text-rose-200 mb-12">Ábrela Despacio</h2>
+
+            <div class="envelope-wrapper flex justify-center">
+                <div id="envelope" class="envelope w-80 h-52 bg-rose-900/90 rounded-b-xl border border-rose-600/50 shadow-2xl cursor-pointer relative flex items-center justify-center hover:scale-105 transition-transform">
+                    <!-- Solapa superior -->
+                    <div class="envelope-flap absolute top-0 left-0 right-0 h-28 bg-rose-950 rounded-t-xl border-b border-rose-600/40 clip-path-triangle"></div>
+                    
+                    <!-- Sello de Cera Vintage -->
+                    <div id="waxSeal" class="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-700 to-amber-500 border-2 border-amber-300 flex items-center justify-center shadow-lg z-10 glow-gold">
+                        <span class="font-script text-2xl text-amber-950 font-bold">M&J</span>
+                    </div>
+
+                    <p class="absolute bottom-4 text-[10px] tracking-widest text-rose-300/70 uppercase">Toca para abrir la carta</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODAL CARTA DESPLEGADA -->
+        <div id="letterModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-[#fdfbf7] text-gray-800 max-w-lg w-full p-8 rounded-2xl shadow-2xl relative border-2 border-amber-200 transform scale-95 transition-all duration-300 max-h-[85vh] overflow-y-auto">
+                <button id="btnCloseLetter" class="absolute top-4 right-4 text-rose-900/60 hover:text-rose-900 p-2 text-xl font-bold">
+                    &times;
+                </button>
+                <h3 class="font-script text-4xl text-rose-900 mb-6 text-center">Amor mío,</h3>
+                <div class="space-y-4 text-sm leading-relaxed text-gray-700 font-light">
+                    <p>Si estás leyendo esto, es porque otro mes más me sigues eligiendo con esa paciencia tuya que me desarma.</p>
+                    <p>Quería escribirte algo bonito, de esos textos que la gente guarda en capturas y que se ven preciosos en cualquier idioma. Pero solo me sale decirte lo de siempre: que contigo todo es más fácil. Despertar, reír, equivocarme, volver.</p>
+                    <p>Gracias por las noches largas, por las mañanas tontas, por defenderme cuando ya ni yo sé hacerlo, por enseñarme cómo se quiere bien.</p>
+                    <p>Un mes más contigo se siente como una promesa bonita: quiere todos los demás.</p>
+                </div>
+                <p class="font-script text-3xl text-rose-900 text-right mt-8">Siempre tuyo ♥</p>
+            </div>
+        </div>
+
+        <!-- 9. CIERRE Y CONFETI -->
+        <section class="py-24 text-center bg-gradient-to-t from-wine-950 via-wine-900 to-transparent px-6 relative">
+            <h2 class="font-script text-6xl sm:text-7xl text-rose-300 mb-4 drop-shadow-[0_0_20px_rgba(244,114,182,0.4)]">
+                Te amo, Mi amor.
+            </h2>
+            <p class="text-xs sm:text-sm text-rose-200/80 tracking-widest uppercase mb-8">
+                Hoy, mañana y todos los meses bonitos que nos quedan.
+            </p>
+
+            <button id="btnCelebration" class="px-8 py-3 rounded-full bg-gradient-to-r from-rose-600 to-rose-400 text-white font-semibold tracking-wider text-xs uppercase shadow-xl hover:scale-105 active:scale-95 transition-transform glow-red">
+                Celebrar Nuestro Amor 🎉
+            </button>
+        </section>
+    </main>
+
+    <!-- SCRIPTS DE INTERACTIVIDAD COMPLETA -->
+    <script>
+        // --- 1. LÓGICA DE CANVAS 2D DE PÉTALOS DE ROSA ---
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Petal {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 8 + 6;
+                this.speedY = Math.random() * 1.5 + 0.8;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = Math.random() * 2 - 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.01) + this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#e11d48';
+
+                // Dibujar forma de pétalo
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.bezierCurveTo(-this.size, -this.size, -this.size, this.size, 0, this.size * 1.5);
+                ctx.bezierCurveTo(this.size, this.size, this.size, -this.size, 0, 0);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) {
+            petals.push(new Petal());
+        }
+
+        function animatePetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            petals.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animatePetals);
+        }
+        animatePetals();
+
+        // --- 2. LÓGICA DEL SCANNER DE HUELLA DACTILAR ---
+        const fpContainer = document.getElementById('fpContainer');
+        const progressCircle = document.getElementById('progressCircle');
+        const lockStatus = document.getElementById('lockStatus');
+        const lockScreen = document.getElementById('lockScreen');
+        const mainContent = document.getElementById('mainContent');
+
+        let scanProgress = 0;
+        let scanInterval = null;
+        const totalLength = 326.72; // Perímetro del círculo r=52
+
+        const statusMessages = [
+            "Escaneando...",
+            "Verificando latidos...",
+            "Casi listo...",
+            "Huella reconocida ♥"
+        ];
+
+        function startScan() {
+            if (scanInterval) return;
+            scanProgress = 0;
+            
+            scanInterval = setInterval(() => {
+                scanProgress += 2.5;
+                const offset = totalLength - (scanProgress / 100) * totalLength;
+                progressCircle.style.strokeDashoffset = offset;
+
+                // Actualizar textos dinámicos
+                if (scanProgress < 30) lockStatus.textContent = statusMessages[0];
+                else if (scanProgress < 65) lockStatus.textContent = statusMessages[1];
+                else if (scanProgress < 95) lockStatus.textContent = statusMessages[2];
+                else lockStatus.textContent = statusMessages[3];
+
+                if (scanProgress >= 100) {
+                    completeScan();
+                }
+            }, 30);
+        }
+
+        function cancelScan() {
+            if (scanProgress >= 100) return;
+            clearInterval(scanInterval);
+            scanInterval = null;
+            scanProgress = 0;
+            progressCircle.style.strokeDashoffset = totalLength;
+            lockStatus.textContent = "Mantén presionado para desbloquear ♥";
+        }
+
+        function completeScan() {
+            clearInterval(scanInterval);
+            lockStatus.textContent = "¡Bienvenido, mi amor!";
+            
+            setTimeout(() => {
+                lockScreen.style.opacity = '0';
+                mainContent.classList.remove('hidden');
+                setTimeout(() => {
+                    mainContent.style.opacity = '1';
+                    lockScreen.style.display = 'none';
+                }, 800);
+            }, 400);
+        }
+
+        // Eventos Touch y Mouse para el Scanner
+        fpContainer.addEventListener('mousedown', startScan);
+        fpContainer.addEventListener('mouseup', cancelScan);
+        fpContainer.addEventListener('mouseleave', cancelScan);
+
+        fpContainer.addEventListener('touchstart', (e) => { e.preventDefault(); startScan(); });
+        fpContainer.addEventListener('touchend', cancelScan);
+
+        // --- 3. REPRODUCTOR DE MÚSICA SIMULADO ---
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const playIcon = document.getElementById('playIcon');
+        let isPlaying = false;
+
+        btnPlayPause.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playIcon.setAttribute('data-lucide', 'pause');
+            } else {
+                playIcon.setAttribute('data-lucide', 'play');
+            }
+            lucide.createIcons();
+        });
+
+        // --- 4. CONTADOR EN TIEMPO REAL DESDE FECHA FIJADA ---
+        function updateTimer() {
+            const startDate = new Date('2024-11-01T00:00:00');
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60) ) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('cDays').textContent = String(days).padStart(3, '0');
+            document.getElementById('cHours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cMinutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('cSeconds').textContent = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // --- 5. CARTA INTERACTIVA ---
+        const envelope = document.getElementById('envelope');
+        const letterModal = document.getElementById('letterModal');
+        const btnCloseLetter = document.getElementById('btnCloseLetter');
+
+        envelope.addEventListener('click', () => {
+            envelope.classList.add('open');
+            setTimeout(() => {
+                letterModal.classList.remove('opacity-0', 'pointer-events-none');
+                letterModal.querySelector('div').classList.remove('scale-95');
+            }, 400);
+        });
+
+        btnCloseLetter.addEventListener('click', () => {
+            letterModal.classList.add('opacity-0', 'pointer-events-none');
+            letterModal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                envelope.classList.remove('open');
+            }, 300);
+        });
+
+        // --- 6. BOTÓN DE CELEBRACIÓN DE CONFETI ---
+        document.getElementById('btnCelebration').addEventListener('click', () => {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#e11d48', '#f3e5ab', '#fda4af']
+            });
+        });
+
+        // Inicializar iconos de Lucide
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

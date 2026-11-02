@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Heart Particle Experience - Three.js</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        script: ['Great Vibes', 'cursive'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        neonPink: '#ff2a7a',
+                        neonPurple: '#a855f7',
+                        cyberTurquoise: '#00f2fe',
+                        goldenAmber: '#fbbf24',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #030008;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+        }
+
+        /* Glassmorphism card styling */
+        .glass-panel {
+            background: rgba(15, 7, 26, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 42, 122, 0.4);
+            border-radius: 4px;
+        }
+
+        /* Ambient glow helper */
+        .glow-effect {
+            filter: drop-shadow(0 0 15px rgba(255, 42, 122, 0.6));
+        }
+
+        /* Range input styling */
+        input[type="range"] {
+            accent-color: #ff2a7a;
+        }
+    </style>
+</head>
+<body class="relative text-slate-100 min-h-screen">
+
+    <!-- CANVAS 3D -->
+    <div id="webgl-container" class="fixed inset-0 z-0 cursor-grab active:cursor-grabbing"></div>
+
+    <!-- MAIN OVERLAY CONTAINER -->
+    <div class="relative z-10 pointer-events-none min-h-screen flex flex-col justify-between p-4 sm:p-6">
+
+        <!-- HEADER TOP BAR -->
+        <header class="flex items-center justify-between w-full max-w-7xl mx-auto">
+            <div class="pointer-events-auto flex items-center space-x-3 glass-panel px-4 py-2 rounded-full shadow-2xl">
+                <div class="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></div>
+                <span class="text-xs sm:text-sm font-semibold tracking-wider text-rose-300">Heart Particles 3D</span>
+            </div>
+
+            <div class="pointer-events-auto flex items-center space-x-2">
+                <button id="toggleUI" class="glass-panel p-2.5 rounded-full hover:bg-white/10 transition-all text-slate-300 hover:text-white" title="Ocultar/Mostrar Controles">
+                    <svg id="uiIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- CENTER ROMANTIC MESSAGE DISPLAY -->
+        <div class="self-center text-center my-auto px-4 max-w-2xl">
+            <h1 id="messageDisplay" class="font-script text-5xl sm:text-7xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-pink-400 to-rose-200 transition-all duration-700 drop-shadow-[0_0_25px_rgba(255,42,122,0.6)]">
+                Te Amo
+            </h1>
+            <p id="subMessageDisplay" class="text-xs sm:text-sm text-rose-200/70 tracking-widest uppercase mt-3 font-light">
+                Universo en constante latido
+            </p>
+        </div>
+
+        <!-- CONTROLS & PANEL -->
+        <div id="controlsPanel" class="pointer-events-auto w-full max-w-lg mx-auto transition-all duration-500">
+            <div class="glass-panel p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4">
+                
+                <!-- CUSTOM MESSAGE INPUT & QUICK SELECT -->
+                <div class="space-y-2">
+                    <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-widest block">Mensaje Personalizado</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="customInput" placeholder="Escribe un mensaje..." value="Te Amo" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-rose-500 transition-colors">
+                        <button id="btnApplyText" class="bg-rose-600 hover:bg-rose-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition-all shadow-lg active:scale-95">
+                            Guardar
+                        </button>
+                    </div>
+                    <!-- Quick Presets -->
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <button class="preset-msg text-[10px] bg-white/5 hover:bg-white/15 px-2.5 py-1 rounded-full text-rose-200/80 transition-colors">Te Amo ♥</button>
+                        <button class="preset-msg text-[10px] bg-white/5 hover:bg-white/15 px-2.5 py-1 rounded-full text-rose-200/80 transition-colors">Feliz Día</button>
+                        <button class="preset-msg text-[10px] bg-white/5 hover:bg-white/15 px-2.5 py-1 rounded-full text-rose-200/80 transition-colors">Eres Mi Sol</button>
+                        <button class="preset-msg text-[10px] bg-white/5 hover:bg-white/15 px-2.5 py-1 rounded-full text-rose-200/80 transition-colors">Para Siempre</button>
+                    </div>
+                </div>
+
+                <!-- COLOR PRESETS SELECTOR -->
+                <div class="space-y-2">
+                    <label class="text-[11px] font-semibold text-rose-300/80 uppercase tracking-widest block">Paleta de Color</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button data-color="pink" class="color-btn active h-8 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 ring-2 ring-white/50 transition-transform active:scale-95 flex items-center justify-center text-[10px] font-bold text-white shadow-lg">Rosa Neon</button>
+                        <button data-color="purple" class="color-btn h-8 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 transition-transform active:scale-95 flex items-center justify-center text-[10px] font-bold text-white opacity-70 hover:opacity-100">Violeta</button>
+                        <button data-color="turquoise" class="color-btn h-8 rounded-xl bg-gradient-to-r from-cyan-400 to-teal-500 transition-transform active:scale-95 flex items-center justify-center text-[10px] font-bold text-slate-900 opacity-70 hover:opacity-100">Cian</button>
+                        <button data-color="gold" class="color-btn h-8 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 transition-transform active:scale-95 flex items-center justify-center text-[10px] font-bold text-slate-900 opacity-70 hover:opacity-100">Dorado</button>
+                    </div>
+                </div>
+
+                <!-- SLIDERS: PULSE SPEED & PARTICLE DENSITY -->
+                <div class="grid grid-cols-2 gap-4 pt-1">
+                    <div>
+                        <div class="flex justify-between text-[11px] font-semibold text-rose-300/80 uppercase tracking-widest mb-1">
+                            <span>Velocidad Latido</span>
+                            <span id="speedVal" class="text-white">1.0x</span>
+                        </div>
+                        <input type="range" id="speedSlider" min="0.2" max="2.5" step="0.1" value="1.0" class="w-full h-1.5 bg-black/50 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[11px] font-semibold text-rose-300/80 uppercase tracking-widest mb-1">
+                            <span>Partículas</span>
+                            <span id="densityVal" class="text-white">12k</span>
+                        </div>
+                        <input type="range" id="densitySlider" min="5000" max="25000" step="1000" value="12000" class="w-full h-1.5 bg-black/50 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- PLAY / REFORM ACTION BUTTONS -->
+                <div class="flex items-center gap-3 pt-2">
+                    <button id="btnPlayPause" class="flex-1 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 border border-white/10">
+                        <svg id="playIcon" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                        <span id="playText">Pausar</span>
+                    </button>
+                    <button id="btnReform" class="flex-1 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-500 hover:to-pink-400 text-xs font-semibold uppercase tracking-wider transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <span>Reorganizar</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- THREE.JS LOGIC -->
+    <script>
+        // --- 1. CONFIGURACIÓN Y ESCENA THREE.JS ---
+        const container = document.getElementById('webgl-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030008, 0.012);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 45);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 0.8;
+        controls.enableZoom = true;
+        controls.minDistance = 20;
+        controls.maxDistance = 80;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.6;
+
+        // Color Themes Definition
+        const COLOR_THEMES = {
+            pink: {
+                primary: new THREE.Color(0xff2a7a),
+                secondary: new THREE.Color(0xff73b3),
+                glow: '#ff2a7a'
+            },
+            purple: {
+                primary: new THREE.Color(0xa855f7),
+                secondary: new THREE.Color(0xc084fc),
+                glow: '#a855f7'
+            },
+            turquoise: {
+                primary: new THREE.Color(0x00f2fe),
+                secondary: new THREE.Color(0x4facfe),
+                glow: '#00f2fe'
+            },
+            gold: {
+                primary: new THREE.Color(0xfbbf24),
+                secondary: new THREE.Color(0xf59e0b),
+                glow: '#fbbf24'
+            }
+        };
+
+        let currentTheme = COLOR_THEMES.pink;
+
+        // --- 2. GENERACIÓN DE PUNTOS PARAMÉTRICOS DEL CORAZÓN 3D ---
+        let particleCount = 12000;
+        let heartGeometry, heartMaterial, heartParticles;
+        let targetPositions = [];
+        let sourcePositions = [];
+        let animationProgress = 0;
+
+        // Ecuación Paramétrica 3D del Corazón
+        function getHeartPoint(t, u) {
+            // t de -PI a PI, u de -PI/2 a PI/2
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+            const z = u * 6 * Math.sin(t); // Profundidad suave en 3D
+            return new THREE.Vector3(x * 0.9, y * 0.9, z);
+        }
+
+        function createHeartParticleSystem(count) {
+            if (heartParticles) scene.remove(heartParticles);
+
+            particleCount = count;
+            heartGeometry = new THREE.BufferGeometry();
+
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            const sizes = new Float32Array(particleCount);
+            
+            targetPositions = [];
+            sourcePositions = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                // Generar punto en la superficie y volumen del corazón
+                const t = (Math.random() - 0.5) * Math.PI * 2;
+                const u = (Math.random() - 0.5) * Math.PI;
+                const volumeFactor = 0.7 + Math.random() * 0.3; // Relleno interior suave
+
+                const pt = getHeartPoint(t, u);
+                pt.multiplyScalar(volumeFactor);
+
+                // Posición objetivo (Corazón)
+                targetPositions.push(pt.x, pt.y, pt.z);
+
+                // Posición origen dispersa (Efecto Ensamblaje)
+                const rx = (Math.random() - 0.5) * 120;
+                const ry = (Math.random() - 0.5) * 120;
+                const rz = (Math.random() - 0.5) * 120;
+                sourcePositions.push(rx, ry, rz);
+
+                // Iniciar en posición dispersa
+                positions[i * 3] = rx;
+                positions[i * 3 + 1] = ry;
+                positions[i * 3 + 2] = rz;
+
+                // Color Gradiente
+                const mixFactor = Math.random();
+                const pColor = currentTheme.primary.clone().lerp(currentTheme.secondary, mixFactor);
+                colors[i * 3] = pColor.r;
+                colors[i * 3 + 1] = pColor.g;
+                colors[i * 3 + 2] = pColor.b;
+
+                // Tamaño variado
+                sizes[i] = Math.random() * 0.8 + 0.4;
+            }
+
+            heartGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            heartGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            // Textura circular de punto luminoso
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            grad.addColorStop(0.3, 'rgba(255, 255, 255, 0.8)');
+            grad.addColorStop(0.8, 'rgba(255, 255, 255, 0.2)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 64, 64);
+
+            const pTexture = new THREE.CanvasTexture(canvas);
+
+            heartMaterial = new THREE.PointsMaterial({
+                size: 1.2,
+                map: pTexture,
+                vertexColors: true,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            heartParticles = new THREE.Points(heartGeometry, heartMaterial);
+            scene.add(heartParticles);
+
+            // Animar ensamblaje inicial con GSAP
+            triggerAssemblyAnimation();
+        }
+
+        // --- 3. ANIMACIÓN DE ENSAMBLAJE Y PULSACIÓN ---
+        let assemblyProgress = { value: 0 };
+
+        function triggerAssemblyAnimation() {
+            assemblyProgress.value = 0;
+            gsap.to(assemblyProgress, {
+                value: 1,
+                duration: 2.8,
+                ease: "power3.inOut"
+            });
+        }
+
+        // Fondo de Polvo Estelar
+        const bgParticleCount = 800;
+        const bgGeometry = new THREE.BufferGeometry();
+        const bgPositions = new Float32Array(bgParticleCount * 3);
+
+        for (let i = 0; i < bgParticleCount * 3; i += 3) {
+            bgPositions[i] = (Math.random() - 0.5) * 160;
+            bgPositions[i + 1] = (Math.random() - 0.5) * 160;
+            bgPositions[i + 2] = (Math.random() - 0.5) * 160;
+        }
+
+        bgGeometry.setAttribute('position', new THREE.BufferAttribute(bgPositions, 3));
+        const bgMaterial = new THREE.PointsMaterial({
+            size: 0.8,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.3,
+            blending: THREE.AdditiveBlending
+        });
+        const bgParticles = new THREE.Points(bgGeometry, bgMaterial);
+        scene.add(bgParticles);
+
+        // --- 4. INTERACCIÓN DE HOVER / RIPPLE CON RAYCASTER ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2(-100, -100);
+
+        window.addEventListener('pointermove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // --- 5. BUCLE DE ANIMACIÓN PRINCIPAL ---
+        let isPlaying = true;
+        let pulseSpeed = 1.0;
+        let clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = clock.getElapsedTime();
+
+            if (isPlaying && heartParticles) {
+                const positions = heartGeometry.attributes.position.array;
+
+                // Ritmo de latido de corazón (Doble pulso: lub-dub)
+                const beatTime = (elapsedTime * pulseSpeed * 2.2) % (Math.PI * 2);
+                let pulseScale = 1.0;
+                
+                // Expresión matemática para doble latido fluido
+                if (beatTime < Math.PI * 0.4) {
+                    pulseScale = 1 + Math.sin(beatTime * 5) * 0.12;
+                } else if (beatTime < Math.PI * 0.8) {
+                    pulseScale = 1 + Math.sin((beatTime - Math.PI * 0.4) * 5) * 0.06;
+                }
+
+                // Raycasting para efecto de onda / repulsión al pasar el cursor
+                raycaster.setFromCamera(mouse, camera);
+                const ray = raycaster.ray;
+
+                const prog = assemblyProgress.value;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+
+                    // Posición objetivo escalada por el latido
+                    const tx = targetPositions[idx] * pulseScale;
+                    const ty = targetPositions[idx + 1] * pulseScale;
+                    const tz = targetPositions[idx + 2] * pulseScale;
+
+                    const sx = sourcePositions[idx];
+                    const sy = sourcePositions[idx + 1];
+                    const sz = sourcePositions[idx + 2];
+
+                    // Interpolación de ensamblaje desde disperso a corazón
+                    let cx = sx + (tx - sx) * prog;
+                    let cy = sy + (ty - sy) * prog;
+                    let cz = sz + (tz - sz) * prog;
+
+                    // Deformación ondulatoria sutil
+                    cx += Math.sin(elapsedTime * 2 + cy * 0.2) * 0.15;
+                    cy += Math.cos(elapsedTime * 2 + cx * 0.2) * 0.15;
+
+                    // Repulsión por hover
+                    const pVec = new THREE.Vector3(cx, cy, cz);
+                    const distToRay = ray.distanceToPoint(pVec);
+
+                    if (distToRay < 5) {
+                        const force = (5 - distToRay) * 0.8;
+                        const dir = pVec.clone().sub(ray.origin).normalize();
+                        cx += dir.x * force;
+                        cy += dir.y * force;
+                        cz += dir.z * force;
+                    }
+
+                    positions[idx] = cx;
+                    positions[idx + 1] = cy;
+                    positions[idx + 2] = cz;
+                }
+
+                heartGeometry.attributes.position.needsUpdate = true;
+
+                // Rotación suave continua
+                heartParticles.rotation.y = Math.sin(elapsedTime * 0.3) * 0.15;
+            }
+
+            // Rotación suave del polvo estelar de fondo
+            bgParticles.rotation.y = elapsedTime * 0.02;
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- 6. EVENTOS DE INTERFAZ DE USUARIO ---
+        const messageDisplay = document.getElementById('messageDisplay');
+        const customInput = document.getElementById('customInput');
+        const btnApplyText = document.getElementById('btnApplyText');
+        const speedSlider = document.getElementById('speedSlider');
+        const speedVal = document.getElementById('speedVal');
+        const densitySlider = document.getElementById('densitySlider');
+        const densityVal = document.getElementById('densityVal');
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const playIcon = document.getElementById('playIcon');
+        const playText = document.getElementById('playText');
+        const btnReform = document.getElementById('btnReform');
+        const toggleUI = document.getElementById('toggleUI');
+        const controlsPanel = document.getElementById('controlsPanel');
+
+        // Aplicar texto personalizado
+        function updateText(msg) {
+            messageDisplay.style.opacity = '0';
+            messageDisplay.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                messageDisplay.textContent = msg;
+                messageDisplay.style.opacity = '1';
+                messageDisplay.style.transform = 'scale(1)';
+            }, 300);
+        }
+
+        btnApplyText.addEventListener('click', () => {
+            if (customInput.value.trim() !== '') {
+                updateText(customInput.value.trim());
+            }
+        });
+
+        document.querySelectorAll('.preset-msg').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.textContent.replace(' ♥', '');
+                customInput.value = text;
+                updateText(text);
+            });
+        });
+
+        // Cambiar velocidad de latido
+        speedSlider.addEventListener('input', (e) => {
+            pulseSpeed = parseFloat(e.target.value);
+            speedVal.textContent = `${pulseSpeed.toFixed(1)}x`;
+        });
+
+        // Cambiar densidad de partículas
+        densitySlider.addEventListener('change', (e) => {
+            const count = parseInt(e.target.value);
+            densityVal.textContent = `${(count / 1000).toFixed(0)}k`;
+            createHeartParticleSystem(count);
+        });
+
+        // Cambiar esquema de color
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.color-btn').forEach(b => {
+                    b.classList.remove('ring-2', 'ring-white/50', 'opacity-100');
+                    b.classList.add('opacity-70');
+                });
+                btn.classList.add('ring-2', 'ring-white/50', 'opacity-100');
+                btn.classList.remove('opacity-70');
+
+                const themeKey = btn.getAttribute('data-color');
+                currentTheme = COLOR_THEMES[themeKey];
+
+                // Actualizar brillo del texto
+                messageDisplay.style.dropShadow = `0 0 25px ${currentTheme.glow}`;
+
+                // Recargar colores de partículas
+                createHeartParticleSystem(particleCount);
+            });
+        });
+
+        // Pausar / Reanudar
+        btnPlayPause.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playText.textContent = "Pausar";
+                playIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+            } else {
+                playText.textContent = "Reanudar";
+                playIcon.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+            }
+        });
+
+        // Reorganizar / Reensamblar partículas
+        btnReform.addEventListener('click', () => {
+            triggerAssemblyAnimation();
+        });
+
+        // Ocultar / Mostrar UI
+        let uiVisible = true;
+        toggleUI.addEventListener('click', () => {
+            uiVisible = !uiVisible;
+            if (uiVisible) {
+                controlsPanel.style.opacity = '1';
+                controlsPanel.style.pointerEvents = 'auto';
+                controlsPanel.style.transform = 'translateY(0)';
+            } else {
+                controlsPanel.style.opacity = '0';
+                controlsPanel.style.pointerEvents = 'none';
+                controlsPanel.style.transform = 'translateY(20px)';
+            }
+        });
+
+        // Ajuste responsive de ventana
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- INICIALIZACIÓN ---
+        window.onload = () => {
+            createHeartParticleSystem(particleCount);
+            animate();
+        };
+    </script>
+</body>
+</html>
