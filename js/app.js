@@ -629,9 +629,15 @@
   }
 
   function setCategory(id) {
-    state.category = id;
-    renderFilters();
-    renderGrid();
+    if (els.grid) els.grid.classList.add('is-switching');
+    setTimeout(function () {
+      state.category = id;
+      renderFilters();
+      renderGrid();
+      requestAnimationFrame(function () {
+        if (els.grid) els.grid.classList.remove('is-switching');
+      });
+    }, 180);
   }
 
   function bindCatalog() {

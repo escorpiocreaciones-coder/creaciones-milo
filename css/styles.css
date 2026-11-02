@@ -2045,3 +2045,9 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 
 .book-templates-note a:hover { text-decoration-color: var(--rose); }
 
+
+/* Transiciones dinámicas de catálogo */
+.product-grid { transition: opacity .22s ease, transform .22s ease; }
+.product-grid.is-switching { opacity: 0; transform: translateY(8px); }
+.chip { transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease; }
+.chip.is-active { transform: scale(1.05); }
