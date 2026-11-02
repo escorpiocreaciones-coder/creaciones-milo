@@ -2136,3 +2136,67 @@ details[open] summary { color: var(--rose, #e0527f); }
 /* Asegura que las secciones queden por encima de las partículas */
 section, header, footer, .hero, .catalog, .book-promo { position: relative; z-index: 1; }
 #particle-canvas { z-index: 0; opacity: .5; }
+
+
+/* Modo oscuro */
+html.dark {
+  --bg: #1a1218;
+  --surface: #241a22;
+  --surface-soft: #2d222c;
+  --surface-soft-2: #3a2d38;
+  --ink: #f0e6dc;
+  --ink-soft: #c9b8b0;
+  --ink-faint: #a89a94;
+  --line: #3a2d38;
+  --line-soft: #2d222c;
+  --primary: #e0527f;
+  --primary-soft: #f472b6;
+  --primary-deep: #94496d;
+  --accent: #e7c79a;
+  --accent-soft: #c7a05b;
+  --shadow-sm: 0 6px 18px rgba(0,0,0,0.35);
+  --shadow-md: 0 14px 38px rgba(0,0,0,0.45);
+  --shadow-lg: 0 28px 70px rgba(0,0,0,0.55);
+}
+html.dark body { background: var(--bg); color: var(--ink); }
+.theme-toggle {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1.1rem; transition: transform .2s ease, background .2s ease;
+}
+.theme-toggle:hover { transform: scale(1.08); }
+
+
+/* Modo oscuro */
+html.dark {
+  --bg: #1a1218;
+  --surface: #241a22;
+  --surface-soft: #2d222c;
+  --surface-soft-2: #3a2d38;
+  --ink: #f0e6dc;
+  --ink-soft: #c9b8b0;
+  --ink-faint: #a89a94;
+  --line: #3a2d38;
+  --line-soft: #2d222c;
+  --primary: #e0527f;
+  --primary-soft: #f472b6;
+  --primary-deep: #94496d;
+  --accent: #e7c79a;
+  --accent-soft: #c7a05b;
+  --shadow-sm: 0 6px 18px rgba(0,0,0,0.35);
+  --shadow-md: 0 14px 38px rgba(0,0,0,0.45);
+  --shadow-lg: 0 28px 70px rgba(0,0,0,0.55);
+}
+html.dark body { background: var(--bg); color: var(--ink); }
+.theme-toggle {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1.1rem; transition: transform .2s ease, background .2s ease;
+}
+.theme-toggle:hover { transform: scale(1.08); }

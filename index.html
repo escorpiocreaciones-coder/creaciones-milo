@@ -24,6 +24,9 @@
     gtag('js', new Date());
     gtag('config', 'G-XXXXXXXXXX');
   </script>
+  <script id="milo-theme-init">
+    (function(){try{var t=localStorage.getItem('milo-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})();
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#catalogo">Ir al catálogo</a>
@@ -43,6 +46,7 @@
         </span>
       </a>
 
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Cambiar tema">🌙</button>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <span></span><span></span>
         <span class="sr-only">Abrir menú</span>
@@ -340,5 +344,6 @@
   <script src="js/products.js" defer></script>
   <script src="js/app.js" defer></script>
   <script src="js/effects.js" defer></script>
+  <script src="js/theme.js" defer></script>
 </body>
 </html>
