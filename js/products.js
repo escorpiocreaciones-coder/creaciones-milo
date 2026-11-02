@@ -4,7 +4,8 @@
   { id: 'carteles', label: 'Carteles' },
   { id: 'peluches', label: 'Peluches' },
   { id: 'libros', label: 'Libros digitales' },
-  { id: 'combos', label: 'Combos' }
+  { id: 'combos', label: 'Combos' },
+  { id: 'prendas', label: 'Prendas' }
 ];
 
 window.PRODUCTS = [
@@ -373,6 +374,84 @@ window.PRODUCTS = [
     includes: ['Caja temÃ¡tica', 'Fotos y recuerdos', 'Detalles comestibles', 'Tarjeta personalizada'],
     delivery: 'Lista en 5 a 7 dÃ­as hÃ¡biles.',
     tags: 'primera cita recuerdos cine cafe playa aniversario'
+  },
+  {
+    id: 'polera-pareja',
+    name: 'Polera de pareja personalizada',
+    category: 'prendas',
+    lead: 'Dos poleras con un diseño que los une.',
+    description: 'Poleras de algodón para pareja con diseño personalizado: nombres, fecha o frase. Perfectas para aniversarios, viajes o fotos juntos.',
+    price: 120,
+    badge: 'Nuevo',
+    featured: 3,
+    palette: ['#743142', '#e0527f', '#f5ddd1', '#c7a05b'],
+    options: [
+      {
+        name: 'talla',
+        label: 'Talla',
+        values: [
+          { label: 'S', price: 0 },
+          { label: 'M', price: 0 },
+          { label: 'L', price: 0 },
+          { label: 'XL', price: 10 }
+        ]
+      },
+      {
+        name: 'color',
+        label: 'Color',
+        values: [
+          { label: 'Blanco', price: 0 },
+          { label: 'Negro', price: 0 },
+          { label: 'Vino', price: 0 }
+        ]
+      }
+    ],
+    fields: [
+      { name: 'nombres', label: 'Nombres de la pareja', placeholder: 'Ej: Ana & Luis', required: true, maxlength: 60 },
+      { name: 'frase', label: 'Frase o fecha', placeholder: 'Ej: Est. 2021 o Siempre juntos', maxlength: 40 }
+    ],
+    includes: ['2 poleras personalizadas', 'Diseño a elección', 'Empaque para regalo'],
+    delivery: 'Lista en 7 a 10 días hábiles.',
+    tags: 'polera pareja ropa aniversario regalo personalizada'
+  },
+  {
+    id: 'canguro-pareja',
+    name: 'Canguro de pareja personalizado',
+    category: 'prendas',
+    lead: 'Canguros cómodos con su diseño único.',
+    description: 'Canguros (hoodies) de pareja con estampado personalizado. Abrigados, suaves y listos para usar en cualquier ocasión.',
+    price: 180,
+    badge: 'Nuevo',
+    featured: 4,
+    palette: ['#2a1f1c', '#743142', '#d58f80', '#f5ddd1'],
+    options: [
+      {
+        name: 'talla',
+        label: 'Talla',
+        values: [
+          { label: 'S', price: 0 },
+          { label: 'M', price: 0 },
+          { label: 'L', price: 0 },
+          { label: 'XL', price: 15 }
+        ]
+      },
+      {
+        name: 'color',
+        label: 'Color',
+        values: [
+          { label: 'Negro', price: 0 },
+          { label: 'Gris', price: 0 },
+          { label: 'Vino', price: 0 }
+        ]
+      }
+    ],
+    fields: [
+      { name: 'nombres', label: 'Nombres de la pareja', placeholder: 'Ej: Ana & Luis', required: true, maxlength: 60 },
+      { name: 'frase', label: 'Frase o fecha', placeholder: 'Ej: Est. 2021 o Siempre juntos', maxlength: 40 }
+    ],
+    includes: ['2 canguros personalizados', 'Diseño a elección', 'Empaque para regalo'],
+    delivery: 'Lista en 10 a 14 días hábiles.',
+    tags: 'canguro hoodie pareja ropa abrigo personalizada'
   }
 ];
 
