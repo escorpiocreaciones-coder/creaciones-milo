@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un ramo para ti — Creaciones Milo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=Outfit:wght@200..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #5d4423; --ink-soft: #8a7350; --paper: #fffaf1; --cream: #fbeecb;
+  --gold: #e8a93c; --gold-soft: #f4c95d; --seed: #7a4a1f; --leaf: #6d8f4e;
+  --rose: #e0527f; --wine: #743142;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Outfit", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 82% 12%, rgba(244,201,93,.24), rgba(244,201,93,0) 34%),
+    radial-gradient(circle at 14% 74%, rgba(232,169,60,.16), rgba(232,169,60,0) 40%),
+    linear-gradient(180deg, #fdf6e7 0%, #faf0d8 58%, #f6e8cc 100%);
+  min-height: 100vh;
+}
+em { font-style: italic; }
+button { font: inherit; cursor: pointer; }
+
+.stage-head { text-align: center; padding: 46px 20px 6px; }
+.kicker { font-size: .73rem; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: var(--wine); opacity: .75; }
+h1 { font-family: "Fraunces", serif; font-weight: 640; font-size: clamp(2rem, 6.2vw, 3.1rem); letter-spacing: -.015em; margin-top: 10px; color: var(--ink); }
+h1 em { color: var(--gold); font-style: italic; }
+.hint { color: var(--ink-soft); font-weight: 300; font-size: .95rem; margin-top: 8px; }
+
+.scene { position: relative; max-width: 780px; margin: 8px auto 0; padding: 40px 18px 0; }
+.field { position: relative; width: min(760px, 94vw); margin: 0 auto; }
+svg { display: block; width: 100%; height: auto; }
+
+.sun-glow { position: absolute; right: 4%; top: 2%; width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,222,140,.55), rgba(255,222,140,0) 70%); filter: blur(2px); pointer-events: none; }
+
+.flower { opacity: 0; transform: scale(.2); transform-origin: 50% 50%; transition: opacity .55s ease, transform .8s cubic-bezier(.34,1.56,.4,1); }
+.flower.open { opacity: 1; transform: scale(1); }
+.flower .head-wrap { transform-origin: 50% 30%; animation: sway 5.6s ease-in-out infinite; }
+@keyframes sway { 0%, 100% { transform: rotate(-2.4deg); } 50% { transform: rotate(2.4deg); } }
+
+.badge { pointer-events: all; }
+.badge rect { fill: #fffaf1; stroke: rgba(232,169,60,.85); stroke-width: 2; }
+.badge .flap { fill: none; stroke: rgba(133,99,52,.55); stroke-width: 1.6; }
+.badge .seal { fill: var(--rose); }
+.badge:hover rect { stroke: var(--wine); }
+.badge:focus { outline: none; }
+.pulse { animation: pulse 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: .95; } 50% { transform: scale(1.12); opacity: .75; } }
+
+.ribbon-knot path { fill: var(--rose); opacity: .16; }
+
+.petal { position: fixed; top: -5vh; z-index: 40; pointer-events: none; opacity: 0; }
+.petal i { display: block; width: 13px; height: 17px; border-radius: 60% 40% 55% 45%; background: linear-gradient(135deg, #f6cf6b, #e8a93c); box-shadow: 0 2px 5px rgba(160,110,30,.18); }
+@keyframes fallDown { 0% { transform: translateY(-4vh) rotate(0deg); opacity: 0; } 12% { opacity: .95; } 100% { transform: translateY(108vh) rotate(300deg); opacity: 0; } }
+
+.plaque { text-align: center; margin: 2px auto 46px; }
+.plaque span { display: inline-block; font-family: "Fraunces", serif; font-style: italic; font-size: 1.02rem; color: var(--ink); background: linear-gradient(180deg, #fff6dd, #f7e6c2); border: 1px solid rgba(232,169,60,.45); padding: 10px 26px; border-radius: 999px; box-shadow: 0 8px 22px rgba(160,110,30,.12); }
+
+footer { text-align: center; padding: 26px 16px 34px; color: var(--ink-soft); font-weight: 300; font-size: .88rem; }
+footer strong { font-weight: 600; color: var(--ink); }
+
+.letter-veil { position: fixed; inset: 0; background: rgba(74,52,22,.34); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 80; padding: 18px; }
+.letter-veil.show { display: flex; }
+.letter { width: min(380px, 92vw); background: var(--paper); border-radius: 20px; overflow: hidden; box-shadow: 0 30px 80px rgba(52,32,10,.35); transform: translateY(26px) scale(.94); opacity: 0; transition: transform .45s cubic-bezier(.2,.8,.25,1), opacity .3s; position: relative; }
+.letter-veil.show .letter { transform: translateY(0) scale(1); opacity: 1; }
+.letter-media { height: 218px; position: relative; background: #eee9dd center/cover no-repeat; }
+.letter-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.letter-media .tag { position: absolute; left: 14px; bottom: 12px; background: rgba(116,49,66,.78); color: #fff8ec; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; padding: 5px 12px; border-radius: 999px; backdrop-filter: blur(2px); }
+.letter-body { padding: 18px 22px 24px; }
+.letter-body h2 { font-family: "Fraunces", serif; font-size: 1.32rem; font-weight: 600; margin: 2px 0 4px; }
+.letter-body time { font-size: .76rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+.letter-body p { margin-top: 12px; color: var(--ink-soft); font-weight: 300; line-height: 1.5; font-size: .96rem; }
+.letter-veil .close { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,250,240,.9); color: var(--ink); font-size: 1rem; box-shadow: 0 4px 14px rgba(52,32,10,.22); z-index: 81; }
+.letter-veil .close:hover { background: #fff; }
+
+.intro { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; background: linear-gradient(180deg, #fdf6e7, #f6e6c4); transition: opacity .5s ease; }
+.intro.hide { opacity: 0; pointer-events: none; }
+.intro-card { text-align: center; padding: 26px; }
+.intro-card .mini { width: 96px; height: 96px; margin: 0 auto 12px; }
+.open-btn { margin-top: 18px; background: linear-gradient(135deg, var(--gold), #d88f2b); color: #fff8ec; border: none; border-radius: 999px; padding: 13px 30px; font-weight: 700; letter-spacing: .02em; box-shadow: 0 16px 34px rgba(180,120,20,.35); transition: transform .2s ease; }
+.open-btn:hover { transform: translateY(-2px); }
+.open-btn:active { transform: translateY(0) scale(.98); }
+@media (prefers-reduced-motion: reduce) { .petal, .head-wrap, .pulse { animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="intro-card">
+    <svg class="mini" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="none"><g fill="#e8a93c">
+        <ellipse cx="60" cy="30" rx="9" ry="17"/><ellipse cx="60" cy="90" rx="9" ry="17"/>
+        <ellipse cx="30" cy="60" rx="17" ry="9"/><ellipse cx="90" cy="60" rx="17" ry="9"/>
+        <ellipse cx="39" cy="39" rx="9" ry="17" transform="rotate(45 39 39)"/>
+        <ellipse cx="81" cy="39" rx="9" ry="17" transform="rotate(135 81 39)"/>
+        <ellipse cx="39" cy="81" rx="9" ry="17" transform="rotate(135 39 81)"/>
+        <ellipse cx="81" cy="81" rx="9" ry="17" transform="rotate(45 81 81)"/>
+      </g><circle cx="60" cy="60" r="17" fill="#7a4a1f"/></g>
+    </svg>
+    <p class="kicker">Un ramo con secretos</p>
+    <h1 style="font-size: clamp(1.6rem, 5vw, 2.2rem);">Desata el <em>ramo</em></h1>
+    <p class="hint">Cada girasol esconde una carta escrita para ti.</p>
+    <button id="open-ramo" class="open-btn" type="button">Abrir el ramo</button>
+  </div>
+</div>
+
+<header class="stage-head">
+  <p class="kicker">Ramo de mensajes</p>
+  <h1>Cinco girasoles, <em>cinco cartas</em>.</h1>
+  <p class="hint">Toca el sobre de cada girasol para leer su carta.</p>
+</header>
+
+<main class="scene">
+  <div class="field" id="field">
+    <div class="sun-glow"></div>
+    <svg id="ramoSvg" viewBox="0 0 760 640" role="img" aria-label="Ramo de girasoles con sobres"></svg>
+  </div>
+</main>
+
+<div class="plaque"><span id="plaque"></span></div>
+
+<footer>Creado con girasoles por <strong>Creaciones Milo</strong> · Bolivia</footer>
+
+<div class="letter-veil" id="veil" role="dialog" aria-modal="true">
+  <article class="letter">
+    <button class="close" id="veilClose" type="button" aria-label="Cerrar carta">✕</button>
+    <div class="letter-media"><img id="lPhoto" alt=""><span class="tag" id="lTag">Carta</span></div>
+    <div class="letter-body">
+      <h2 id="lTitle"></h2>
+      <time id="lDate"></time>
+      <p id="lMsg"></p>
+    </div>
+  </article>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — para entregar a un cliente edita SOLO este bloque:
+   photos: 5 recuerdos. photo vacía = girasol cuadro de colores con
+   iniciales; pega la URL de la foto real cuando la tengas.
+   ===================================================================== */
+/*[CFG]*/
+const RAMO = {
+  couple: 'Ana & Luis',
+  photos: [
+    { photo: '', initials: 'A', grad: 1, title: 'Para mis mañanas', date: '14 feb 2021', msg: 'Tú haces el café antes de que yo lo pida. Ese gesto pequeño es mi universo entero.' },
+    { photo: '', initials: 'A&L', grad: 2, title: 'Por cada error', date: '2 mar 2021', msg: 'Nos equivocamos muchas veces, y a todas le seguimos poniendo cariño.' },
+    { photo: '', initials: 'L', grad: 4, title: 'Una carta con viento', date: 'jun 2021', msg: 'Porque me gustas hasta en los días nublados, sobre todo en los nublados.' },
+    { photo: '', initials: 'A', grad: 7, title: 'La receta del año', date: 'mar 2022', msg: 'Aprendimos a cocinar juntos: la primera vez quemamos todo y nos reímos más que nunca.' },
+    { photo: '', initials: 'A&L', grad: 5, title: 'Siempre estoy aquí', date: 'hoy', msg: 'Si algún día te pierdes en tu cabeza, recuerda: en este rincón del mundo estoy yo, aguardando por ti.' }
+  ]
+};
+const MUSIC = { src: '', title: '' };
+/*[/CFG]*/
+
+/* Paleta de degradados (para los cuadros de color) */
+const GRADS = [
+  ['#e0527f', '#a6486a'],
+  ['#c78b5e', '#743142'],
+  ['#2f9e83', '#58c2a5'],
+  ['#6a7fdb', '#8d9ce8'],
+  ['#bd9152', '#e0b884'],
+  ['#743142', '#5b2534'],
+  ['#f2b23e', '#a5711f'],
+  ['#8d9ce8', '#743142'],
+  ['#58c2a5', '#c78b5e']
+];
+
+function photoURL(p) {
+  if (p.photo) return p.photo;
+  const [c1, c2] = GRADS[(p.grad || 1) % GRADS.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="380" height="300" viewBox="0 0 380 300">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
+    </linearGradient></defs>
+    <rect width="380" height="300" fill="url(#g)"/>
+    <g fill="rgba(255,255,255,.16)"><circle cx="46" cy="52" r="6"/><circle cx="330" cy="60" r="5"/><circle cx="310" cy="240" r="7"/><circle cx="64" cy="248" r="5"/></g>
+    <text x="190" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="58" font-style="italic" fill="rgba(255,255,255,.92)">${(p.initials || '♥').replace(/&/g, '&amp;')}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+/* Ramo: tallos + 5 girasoles con sus sobres */
+const SPOTS = [
+  { x: 205, y: 302, s: 1.04, stem: 'M380 560 C356 500 330 430 296 376 C278 348 244 322 210 306' },
+  { x: 330, y: 205, s: .88,  stem: 'M380 560 C372 480 356 350 336 240' },
+  { x: 478, y: 296, s: 1.02, stem: 'M380 560 C402 492 440 400 470 322' },
+  { x: 388, y: 344, s: .92,  stem: 'M380 560 C380 520 384 470 388 392' },
+  { x: 552, y: 214, s: .8,   stem: 'M380 560 C420 470 490 320 540 240' }
+];
+
+const ramoSvg = document.getElementById('ramoSvg');
+const NS = 'http://www.w3.org/2000/svg';
+
+function petalRing(size) {
+  let d = '';
+  for (let i = 0; i < 12; i += 1) {
+    const a = i * 30;
+    d += `<ellipse cx="0" cy="${-size}" rx="${size * .34}" ry="${size * .62}" transform="rotate(${a})"/>`;
+  }
+  return d;
+};
+
+/* estructura base */
+ramoSvg.innerHTML = `
+<defs>
+  <linearGradient id="stemG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#87a95f"/><stop offset="1" stop-color="#687f43"/>
+  </linearGradient>
+  <radialGradient id="seedG" cx=".42" cy=".38" r=".62">
+    <stop offset="0" stop-color="#8a5a26"/><stop offset=".7" stop-color="#6d3d16"/><stop offset="1" stop-color="#542d0f"/>
+  </radialGradient>
+  <linearGradient id="petalY" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffd76e"/><stop offset="1" stop-color="#eda72e"/>
+  </linearGradient>
+  <linearGradient id="petalB" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#e2a02c"/><stop offset="1" stop-color="#c98818"/>
+  </linearGradient>
+</defs>
+<g class="stems">
+  ${SPOTS.map((s, i) => `<path d="${s.stem}" fill="none" stroke="url(#stemG)" stroke-width="${7 * s.s}" stroke-linecap="round"/>`).join('')}
+  <g fill="#6d8f4e">
+    <path d="M326 448 C296 452 268 476 262 508 C296 506 324 482 326 448 Z"/>
+    <path d="M436 452 C466 456 494 480 500 512 C466 510 438 486 436 452 Z" opacity=".92"/>
+    <path d="M372 470 C350 478 330 500 326 528 C352 522 370 500 372 470 Z" opacity=".9"/>
+    <path d="M398 468 C420 476 440 498 444 526 C418 520 400 498 398 468 Z" opacity=".9"/>
+    <path d="M355 350 C332 352 312 368 306 390 C330 388 350 372 355 350 Z" opacity=".85"/>
+    <path d="M420 372 C444 376 462 394 466 416 C442 412 424 396 420 372 Z" opacity=".85"/>
+  </g>
+</g>
+<g class="ground">
+  <ellipse cx="380" cy="576" rx="66" ry="12" fill="#5d8a4a" opacity=".35"/>
+  <ellipse cx="452" cy="566" rx="34" ry="9" fill="#5d8a4a" opacity=".22"/>
+  <ellipse cx="308" cy="570" rx="30" ry="8" fill="#5d8a4a" opacity=".22"/>
+</g>
+<g id="flowers">
+${SPOTS.map((s, i) => `
+  <g transform="translate(${s.x} ${s.y}) scale(${s.s})"><g class="flower">
+    <g class="head-wrap" style="animation-delay: ${[0, .7, 1.5, .4, 1.05][i]}s">
+      <ellipse rx="66" ry="20" cy="64" fill="rgba(90,60,20,.14)"/>
+      <g fill="url(#petalB)">${petalRing(64)}</g>
+      <g fill="url(#petalY)">${petalRing(58)}</g>
+      <circle r="34" fill="url(#seedG)"/>
+      <g fill="rgba(255,244,214,.28)">
+        <circle cx="-8" cy="-8" r="2.4"/><circle cx="8" cy="-4" r="2.4"/><circle cx="0" cy="8" r="2.4"/>
+        <circle cx="12" cy="10" r="2.2"/><circle cx="-12" cy="8" r="2.2"/><circle cx="4" cy="-12" r="2"/>
+      </g>
+    </g>
+    <g class="badge pulse" role="button" tabindex="0" aria-label="Abrir carta">
+      <rect x="-24" y="52" width="48" height="36" rx="7"/>
+      <path class="flap" d="M-24 56 L0 74 L24 56"/>
+      <circle class="seal" cx="0" cy="74" r="5"/>
+    </g>
+  </g></g>`).join('')}
+</g>
+<g class="ribbon-knot">
+  <path d="M380 566 c-26 -18 -60 -12 -70 8 c18 14 52 8 70 -8 z"/>
+  <path d="M380 566 c26 -18 60 -12 70 8 c-18 14 -52 8 -70 -8 z"/>
+  <path d="M372 560 c-10 -22 6 -38 22 -34 c10 12 2 30 -22 34 z" fill="rgba(224,82,127,.34)"/>
+</g>`;
+
+/* abrir el ramo */
+document.getElementById('open-ramo').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hide');
+  document.getElementById('open-ramo').classList.add('hide');
+  const list = document.querySelectorAll('#flowers .flower');
+  list.forEach(function (f, i) {
+    setTimeout(function () { f.classList.add('open'); }, 160 * i + 140);
+  });
+});
+
+/* pétalos que caen */
+(function petals() {
+  const tops = ['.stage-head', '.plaque'];
+  setInterval(function () {
+    if (document.hidden) return;
+    const p = document.createElement('span');
+    p.className = 'petal';
+    const size = 10 + Math.random() * 8;
+    p.style.left = (6 + Math.random() * 88) + 'vw';
+    p.style.top = '-6vh';
+    p.innerHTML = '<i></i>';
+    p.firstChild.style.width = size + 'px';
+    p.firstChild.style.height = size * 1.35 + 'px';
+    const dur = 5.5 + Math.random() * 4;
+    p.style.animation = 'fallDown ' + dur + 's linear forwards';
+    document.body.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }, 2400);
+})();
+
+/* cartas */
+const veil = document.getElementById('veil');
+const lPhoto = document.getElementById('lPhoto');
+const lTitle = document.getElementById('lTitle');
+const lDate = document.getElementById('lDate');
+const lMsg = document.getElementById('lMsg');
+const lTag = document.getElementById('lTag');
+
+function openLetter(i) {
+  const item = RAMO.photos[i];
+  if (!item) return;
+  lPhoto.src = photoURL(item);
+  lTitle.textContent = item.title || 'Una carta';
+  lDate.textContent = item.date || '';
+  lMsg.textContent = item.msg || '';
+  lTag.textContent = item.date ? 'De ' + (RAMO.couple || 'nosotros') : 'Carta';
+  veil.classList.add('show');
+  document.getElementById('veilClose').focus();
+}
+function closeLetter() { veil.classList.remove('show'); }
+
+const badges = document.querySelectorAll('#flowers .badge');
+badges.forEach(function (badge, i) {
+  badge.addEventListener('click', function (e) { e.stopPropagation(); openLetter(i); });
+  badge.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLetter(i); }
+  });
+});
+document.getElementById('veilClose').addEventListener('click', closeLetter);
+veil.addEventListener('click', function (e) { if (e.target === veil) closeLetter(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLetter(); });
+
+/* placa */
+document.getElementById('plaque').textContent = 'Cultivado por ' + (RAMO.couple || 'nosotros');
+</script>
+
+<script>/*[PLAYER]*/
+(function(){
+  var M = (typeof MUSIC === 'undefined') ? null : MUSIC || {};
+  if (!M || !M.src) return;
+  var st = document.createElement('style'); st.textContent = '.music-btn{position:fixed;right:22px;bottom:22px;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;z-index:95;background:linear-gradient(135deg,#743142,#e0527f);box-shadow:0 12px 26px rgba(116,49,66,.45);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;transition:transform .2s,filter .2s}.music-btn:hover{transform:translateY(-2px)}@keyframes mbar{0%,100%{height:5px}50%{height:15px}}.music-btn i{display:block;width:3px;border-radius:2px;background:rgba(255,250,242,.95);height:5px;margin:0 1.5px}.music-btn.playing i{animation:mbar 1s ease-in-out infinite}.music-btn.playing i:nth-child(2){animation-delay:.15s}.music-btn.playing i:nth-child(3){animation-delay:.3s}.music-btn.playing i:nth-child(4){animation-delay:.45s}';
+  document.head.appendChild(st);
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'music-btn'; b.title = M.title || 'Canción';
+  b.setAttribute('aria-label', 'Poner o quitar la música');
+  b.innerHTML = '<i></i><i></i><i></i><i></i>';
+  var a = new Audio(M.src); a.loop = true; a.preload = 'none';
+  b.addEventListener('click', function(){
+    if (a.paused) { a.play().then(function(){ b.classList.add('playing'); }).catch(function(){ b.style.display = 'none'; }); }
+    else { a.pause(); b.classList.remove('playing'); }
+  });
+  document.body.appendChild(b);
+})();
+/*[/PLAYER]*/</script>
+</body>
+</html>
