@@ -857,8 +857,12 @@
     setTimeout(function () {
       document.querySelectorAll('.reveal').forEach(function (node) {
         var r = node.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) node.classList.add('is-in');
+        if (r.top < window.innerHeight + 200 && r.bottom > -200) node.classList.add('is-in');
       });
+      // Fallback: revela todo si sigue oculto
+      setTimeout(function () {
+        document.querySelectorAll('.reveal:not(.is-in)').forEach(function (n) { n.classList.add('is-in'); });
+      }, 400);
     }, 120);
     bindCatalog();
     bindDialog();
