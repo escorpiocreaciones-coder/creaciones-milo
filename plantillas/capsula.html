@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cápsula del tiempo — Ana & Luis</title>
+<meta name="description" content="Una caja digital que se abre paso a paso para revelar recuerdos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #1d1520;
+  --panel: #2a1f2e;
+  --ink: #f4e7df;
+  --ink-soft: #c4a9a4;
+  --gold: #e0b884;
+  --rose: #e0527f;
+  --wine: #743142;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(42rem 30rem at 50% 118%, rgba(224, 82, 127, .16), transparent 60%),
+    var(--bg);
+  overflow-x: hidden;
+}
+h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
+
+/* ============ INTRO ============ */
+.intro {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center; text-align: center;
+  transition: opacity .7s ease, visibility .7s ease;
+}
+.intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-kicker { font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.intro h1 { font-size: clamp(2.5rem, 7.5vw, 4.3rem); letter-spacing: -.02em; margin: 12px 0 8px; }
+.intro h1 em { font-style: italic; color: var(--rose); }
+.intro p { color: var(--ink-soft); max-width: 44ch; margin: 0 auto 26px; font-weight: 300; }
+.open-btn {
+  border: none; cursor: pointer; font: inherit; font-weight: 600; color: #241419;
+  padding: 15px 34px; border-radius: 999px;
+  background: linear-gradient(115deg, #e8c69a, #e0b884);
+  box-shadow: 0 16px 34px rgba(224, 184, 132, .22);
+  transition: transform .2s ease;
+}
+.open-btn:hover { transform: translateY(-2px); }
+
+/* ============ CÁPSULA ============ */
+.scene { max-width: 860px; margin: 0 auto; padding: 40px 20px 110px; min-height: 100vh; }
+.scene-head { text-align: center; margin-bottom: 16px; }
+.scene-head .kicker { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.scene-head h2 { font-size: clamp(1.7rem, 4.6vw, 2.4rem); margin-top: 8px; letter-spacing: -.015em; }
+.scene-head h2 em { font-style: italic; color: var(--rose); }
+.hint { text-align: center; color: var(--ink-soft); font-weight: 300; font-size: .92rem; margin-bottom: 26px; }
+
+/* ---------- La caja ---------- */
+.capsule-stage {
+  position: relative;
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 26px;
+}
+.box {
+  position: relative;
+  width: min(300px, 76vw);
+  aspect-ratio: 300 / 210;
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+.box-lid {
+  position: absolute; inset: 0 0 62% 0;
+  background: linear-gradient(165deg, #6b3a4e, #4a2536);
+  border-radius: 14px 14px 4px 4px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .14), 0 12px 30px rgba(0, 0, 0, .45);
+  transform-origin: top center;
+  transition: transform 1s cubic-bezier(.3,.8,.3,1), transform-style 1s;
+  z-index: 3;
+  transform: rotateX(0deg);
+}
+.capsule-stage.open .box-lid { transform: rotateX(-118deg); }
+.box-lid::after {
+  content: "";
+  position: absolute; left: 50%; top: 10px; transform: translateX(-50%);
+  width: 40px; height: 14px; border-radius: 7px;
+  background: var(--gold);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .4);
+}
+.box-body {
+  position: absolute; inset: 40% 0 0 0;
+  background: linear-gradient(180deg, #57304a, #3d2337);
+  border-radius: 4px 4px 14px 14px;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .1);
+  z-index: 2;
+  overflow: hidden;
+}
+.box-glow {
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+  width: 0; height: 0; opacity: 0; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 160, .5), transparent 62%);
+  transition: all .9s ease .5s;
+}
+.capsule-stage.open .box-glow { width: 200px; height: 200px; opacity: 1; }
+.shhh {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  color: var(--ink-soft); font-size: .9rem; font-weight: 300;
+  opacity: 1; transition: opacity .4s ease;
+}
+.capsule-stage.open .shhh { opacity: 0; }
+
+/* ---------- Mensajes revelados ---------- */
+.reveals { display: grid; gap: 18px; margin-top: 40px; }
+.rv {
+  opacity: 0;
+  transform: translateY(24px) scale(.98);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.25,1);
+}
+.rv.in { opacity: 1; transform: none; }
+.rv-card {
+  background: linear-gradient(170deg, var(--panel), #231824);
+  border: 1px solid rgba(224, 184, 132, .25);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, .35);
+}
+.rv-card .mini {
+  width: 96px; height: 96px; border-radius: 12px;
+  background-size: cover; background-position: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .12);
+}
+.rv-card .rv-body { min-width: 0; }
+.rv-card .rv-kicker { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.rv-card .rv-title { font-family: "Fraunces", serif; font-size: 1.2rem; margin: 2px 0 6px; }
+.rv-card .rv-msg { color: var(--ink-soft); font-weight: 300; font-size: .92rem; line-height: 1.45; }
+
+.foot {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; text-align: center;
+  padding: 14px 16px 18px; font-size: .84rem; color: rgba(244, 231, 223, .65);
+  background: linear-gradient(180deg, transparent, rgba(13, 8, 10, .9));
+  pointer-events: none;
+}
+.foot strong { color: var(--gold); }
+
+@media (max-width: 620px) {
+  .rv-card { flex-direction: column; align-items: flex-start; }
+  .rv-card .mini { width: 100%; height: 120px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+  <div id="intro" class="intro">
+    <div>
+      <p class="intro-kicker">Sellada con un beso</p>
+      <h1>Ana <em>&</em> Luis</h1>
+      <p>Una cápsula con recuerdos para abrir de a poco. Dentro hay fotos, mensajes y una promesa para el futuro.</p>
+      <button id="open-capsule" class="open-btn" type="button">Abrir la cápsula</button>
+    </div>
+  </div>
+
+  <main class="scene">
+    <header class="scene-head">
+      <p class="kicker">Cápsula del tiempo</p>
+      <h2>Guardado para <em>la fecha perfecta</em>.</h2>
+    </header>
+    <p class="hint">Toca el botón para abrir… y baja para ver todos los recuerdos.</p>
+
+    <div class="capsule-stage" id="capsuleStage">
+      <div class="box">
+        <div class="box-lid"></div>
+        <div class="box-body"><div class="box-glow"></div></div>
+        <p class="shhh">¿Empezamos?</p>
+      </div>
+    </div>
+
+    <div class="reveals" id="reveals"></div>
+  </main>
+
+  <footer class="foot">
+    Sellada y entregada por <strong>Creaciones Milo</strong> &middot; Bolivia
+  </footer>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — para entregas:
+     photo: URL de la foto (o vacío = placeholder)
+     kicker: tipo de recuerdo (foto / carta / audio…) | title | msg
+   ===================================================================== */
+const CAPSULE = [
+  { photo: '', grad: 1, initials: 'A', kicker: 'Foto', title: 'La primera', msg: 'La primera foto que te tomé cuando no estabas mirando. Sigues igual de adorable.' },
+  { photo: '', grad: 2, initials: 'A&L', kicker: 'Foto', title: 'Lunes de lluvia', msg: 'Terminamos empapados… y aún así fue el mejor día del mes.' },
+  { photo: '', grad: 5, initials: 'L', kicker: 'Recuerdo', title: 'Lo que dijimos', msg: '"Yo elijo con quién bailar… aunque no sepa bailar."' },
+  { photo: '', grad: 3, initials: 'A', kicker: 'Foto', title: 'Cielos compartidos', msg: 'Dos sillas de plástico, un atardecer y ninguna prisa.' },
+  { photo: '', grad: 6, initials: '∞', kicker: 'Promesa', title: 'Para el futuro', msg: 'Volver a abrir esta cápsula dentro de un año… y seguir eligiéndonos.' }
+];
+
+const GRADS = [
+  ['#e0527f', '#a6486a'],
+  ['#c78b5e', '#743142'],
+  ['#2f9e83', '#58c2a5'],
+  ['#6a7fdb', '#8d9ce8'],
+  ['#bd9152', '#e0b884'],
+  ['#743142', '#5b2534']
+];
+
+function photoURL(p) {
+  if (p.photo) return p.photo;
+  const [c1, c2] = GRADS[(p.grad || 1) % GRADS.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
+    </linearGradient></defs>
+    <rect width="240" height="240" fill="url(#g)"/>
+    <g fill="rgba(255,255,255,.18)"><circle cx="40" cy="44" r="5"/><circle cx="200" cy="52" r="4"/></g>
+    <text x="120" y="140" text-anchor="middle" font-family="Georgia, serif" font-size="50" font-style="italic" fill="rgba(255,255,255,.9)">${(p.initials || '♥').replace(/&/g, '&amp;')}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+const revealsBox = document.getElementById('reveals');
+CAPSULE.forEach(function (c) {
+  const el = document.createElement('article');
+  el.className = 'rv';
+  el.innerHTML = `
+    <div class="rv-card">
+      <span class="mini" style="background-image:url('${photoURL(c)}')" aria-hidden="true"></span>
+      <div class="rv-body">
+        <p class="rv-kicker">${c.kicker || 'Recuerdo'}</p>
+        <h3 class="rv-title">${c.title}</h3>
+        <p class="rv-msg">${c.msg}</p>
+      </div>
+    </div>`;
+  revealsBox.appendChild(el);
+});
+
+document.getElementById('open-capsule').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hidden');
+});
+
+const stage = document.getElementById('capsuleStage');
+stage.addEventListener('click', function () {
+  if (stage.classList.contains('open')) return;
+  stage.classList.add('open');
+  const items = document.querySelectorAll('.rv');
+  items.forEach(function (el, i) {
+    setTimeout(function () { el.classList.add('in'); }, 700 + i * 320);
+  });
+});
+</script>
+</body>
+</html>

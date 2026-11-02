@@ -2027,3 +2027,21 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
   .search-wrap svg { width: 18px; height: 18px; }
 }
 
+/* ---------- Nota de plantillas en el promo del libro ---------- */
+.book-templates-note {
+  margin-top: 16px;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  font-weight: 300;
+}
+
+.book-templates-note a {
+  color: var(--rose);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(224, 82, 127, 0.35);
+  text-underline-offset: 3px;
+}
+
+.book-templates-note a:hover { text-decoration-color: var(--rose); }
+

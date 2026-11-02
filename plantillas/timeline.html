@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestra historia paso a paso — Ana & Luis</title>
+<meta name="description" content="Su historia en una línea del tiempo que se dibuja al avanzar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fdf7f0;
+  --ink: #4a3040;
+  --ink-soft: #8a6f7a;
+  --wine: #743142;
+  --rose: #e0527f;
+  --gold: #c78b5e;
+  --line: #dcc3c9;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+h1, h2, h3, .serif { font-family: "Fraunces", Georgia, serif; }
+
+/* ============ INTRO ============ */
+.intro {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center; text-align: center;
+  background: radial-gradient(40rem 28rem at 78% 16%, rgba(224, 82, 127, .14), transparent 60%), var(--bg);
+  transition: opacity .7s ease, visibility .7s ease;
+}
+.intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-kicker { font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.intro h1 { font-size: clamp(2.5rem, 7.5vw, 4.4rem); letter-spacing: -.02em; margin: 12px 0 8px; }
+.intro h1 em { font-style: italic; color: var(--rose); }
+.intro p { color: var(--ink-soft); max-width: 44ch; margin: 0 auto 26px; font-weight: 300; }
+.open-btn {
+  border: none; cursor: pointer; font: inherit; font-weight: 600; color: #fff;
+  padding: 15px 34px; border-radius: 999px;
+  background: linear-gradient(115deg, #743142, #a6486a);
+  box-shadow: 0 16px 34px rgba(116, 49, 66, .3);
+  transition: transform .2s ease;
+}
+.open-btn:hover { transform: translateY(-2px); }
+
+/* ============ TIMELINE ============ */
+.tl {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 20px 120px;
+}
+.tl-rail {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  transform: translateX(-50%);
+  background: var(--line);
+  border-radius: 3px;
+}
+.tl-rail-fill {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(180deg, var(--wine), var(--rose), var(--gold));
+  border-radius: 3px;
+  box-shadow: 0 0 16px rgba(224, 82, 127, .55);
+}
+.tl-head { text-align: center; padding-top: 10px; margin-bottom: 30px; }
+.tl-head .kicker { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.tl-head h2 { font-size: clamp(1.7rem, 4.6vw, 2.4rem); margin-top: 8px; letter-spacing: -.015em; }
+.tl-head h2 em { font-style: italic; color: var(--rose); }
+
+.moment {
+  position: relative;
+  width: calc(50% - 44px);
+  margin-bottom: 54px;
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1);
+}
+.moment.in { opacity: 1; transform: none; }
+.moment:nth-child(odd) { margin-left: auto; text-align: left; }
+.moment:nth-child(even) { text-align: left; }
+.moment::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--wine);
+  box-shadow: 0 0 0 5px rgba(116, 49, 66, .16);
+}
+.moment:nth-child(odd)::before { left: -52px; }
+.moment:nth-child(even)::before { right: -52px; }
+.moment .date {
+  font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+  font-weight: 700; color: var(--gold);
+}
+.moment h3 { font-size: 1.24rem; margin: 6px 0 8px; letter-spacing: -.01em; }
+.moment p { color: var(--ink-soft); font-weight: 300; line-height: 1.55; font-size: .96rem; }
+.moment .pic {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 16px 34px rgba(74, 48, 64, .18), 0 0 0 5px #fff, 0 0 0 6px var(--line);
+}
+
+.foot {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; text-align: center;
+  padding: 14px; font-size: .84rem; color: rgba(74, 48, 64, .65);
+  background: linear-gradient(180deg, transparent, rgba(253, 247, 240, .95));
+  pointer-events: none;
+}
+.foot strong { color: var(--wine); }
+
+@media (max-width: 700px) {
+  .tl-rail { left: 14px; }
+  .moment, .moment:nth-child(odd) { width: auto; margin: 0 0 44px 44px; }
+  .moment::before, .moment:nth-child(odd)::before { left: -38px; right: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+  <div id="intro" class="intro">
+    <div>
+      <p class="intro-kicker">Su historia, paso a paso</p>
+      <h1>Ana <em>&</em> Luis</h1>
+      <p>De la primera mirada al día de hoy: una ruta con fechas, fotos y ganas de seguir caminando.</p>
+      <button id="open-tl" class="open-btn" type="button">Comenzar el recorrido</button>
+    </div>
+  </div>
+
+  <main class="tl" id="tl">
+    <div class="tl-rail" aria-hidden="true"><span class="tl-rail-fill" id="railFill"></span></div>
+    <header class="tl-head">
+      <p class="kicker">Línea del tiempo</p>
+      <h2>Cada paso <em>cuenta</em>.</h2>
+    </header>
+    <!-- momentos via JS -->
+  </main>
+
+  <footer class="foot">
+    Caminando con <strong>Creaciones Milo</strong> &middot; Bolivia
+  </footer>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — para entregas a clientes:
+     photo: URL real (o vacío = placeholder de colores)
+     date:  mes/fecha del hito  |  title | msg
+   ===================================================================== */
+const STORY = [
+  { date: 'Feb 2021', title: 'La primera mirada', msg: 'En una tarde cualquiera, un café cambió todos nuestros planes.', photo: '', grad: 1, initials: 'A' },
+  { date: 'Mar 2021', title: 'La primera cita', msg: 'Llegamos tarde a la función… y nos quedamos hasta que se hizo de noche.', photo: '', grad: 2, initials: 'A&L' },
+  { date: 'Jun 2021', title: 'Primer viaje', msg: 'Ruta 9, pan de migas y mil canciones en la radio.', photo: '', grad: 5, initials: 'L' },
+  { date: 'Dic 2021', title: 'Primer Navidad juntos', msg: 'Arbolito de cuatro ramas y muchas ganas de fiesta.', photo: '', grad: 4, initials: 'A' },
+  { date: 'Mar 2022', title: 'La casa de los domingos', msg: 'Música alta y recetas que salieron contra todo pronóstico.', photo: '', grad: 3, initials: 'A&L' },
+  { date: 'May 2023', title: 'Entró un peludo', msg: 'Nike: cuatro patas, dos orejas, un corazón entero.', photo: '', grad: 6, initials: 'N' },
+  { date: 'Jul 2024', title: 'Medio mundo compartido', msg: 'Tres ciudades, un coche pequeño y mil canciones.', photo: '', grad: 5, initials: 'A&L' },
+  { date: 'Hoy', title: 'Y sigue…', msg: 'La línea no termina aquí: faltan muchas estaciones.', photo: '', grad: 1, initials: '∞' }
+];
+
+const GRADS = [
+  ['#e0527f', '#a6486a'],
+  ['#c78b5e', '#743142'],
+  ['#2f9e83', '#58c2a5'],
+  ['#6a7fdb', '#8d9ce8'],
+  ['#bd9152', '#e0b884'],
+  ['#743142', '#5b2534']
+];
+
+function photoURL(p) {
+  if (p.photo) return p.photo;
+  const [c1, c2] = GRADS[(p.grad || 1) % GRADS.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
+    </linearGradient></defs>
+    <rect width="480" height="300" fill="url(#g)"/>
+    <g fill="rgba(255,255,255,.18)"><circle cx="60" cy="52" r="7"/><circle cx="420" cy="60" r="5"/><circle cx="404" cy="248" r="8"/></g>
+    <text x="240" y="176" text-anchor="middle" font-family="Georgia, serif" font-size="64" font-style="italic" fill="rgba(255,255,255,.9)">${(p.initials || '♥').replace(/&/g, '&amp;')}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+const tl = document.getElementById('tl');
+STORY.forEach(function (m) {
+  const el = document.createElement('article');
+  el.className = 'moment';
+  el.innerHTML =
+    `<div class="pic" style="background-image:url('${photoURL(m)}')" aria-hidden="true"></div>
+     <p class="date">${m.date}</p>
+     <h3>${m.title}</h3>
+     <p>${m.msg}</p>`;
+  tl.appendChild(el);
+});
+
+/* ---------- Progreso del riel + aparición ---------- */
+const fill = document.getElementById('railFill');
+const moments = document.querySelectorAll('.moment');
+
+function update() {
+  const rect = tl.getBoundingClientRect();
+  const progress = Math.max(0, Math.min(1, (window.innerHeight * 0.62 - rect.top) / rect.height));
+  fill.style.height = (progress * 100) + '%';
+  moments.forEach(function (m) {
+    const mr = m.getBoundingClientRect();
+    if (mr.top < window.innerHeight * 0.72) m.classList.add('in');
+  });
+}
+window.addEventListener('scroll', update, { passive: true });
+window.addEventListener('resize', update);
+update();
+
+document.getElementById('open-tl').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hidden');
+});
+</script>
+</body>
+</html>

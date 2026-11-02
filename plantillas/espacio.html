@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestra galaxia — Ana & Luis</title>
+<meta name="description" content="Sus recuerdos flotando entre estrellas y órbitas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #e8e4f7;
+  --ink-soft: #b4aed4;
+  --gold: #f0d08e;
+  --rose: #e0527f;
+  --panel: #171a33;
+  --radius: 18px;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+  background: #0c0e1f;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
+
+/* ================= INTRO ================= */
+.intro {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center; text-align: center;
+  background:
+    radial-gradient(46rem 30rem at 20% 18%, rgba(224, 82, 127, .18), transparent 60%),
+    radial-gradient(52rem 34rem at 82% 80%, rgba(106, 127, 219, .2), transparent 62%),
+    #0c0e1f;
+  transition: opacity .8s ease, visibility .8s ease;
+}
+.intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-kicker { font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.intro h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 1.02; margin: 14px 0 10px; letter-spacing: -.02em; }
+.intro h1 em { font-style: italic; background: linear-gradient(115deg, #e0527f, #8d9ce8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.intro p { color: var(--ink-soft); max-width: 46ch; margin: 0 auto 26px; font-weight: 300; }
+.open-btn {
+  border: none; cursor: pointer; font: inherit; font-weight: 600; color: #171a33;
+  padding: 15px 34px; border-radius: 999px;
+  background: linear-gradient(115deg, #f0d08e, #e8b56a);
+  box-shadow: 0 16px 34px rgba(240, 208, 142, .25);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.open-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 44px rgba(240, 208, 142, .35); }
+
+/* ========== ESCENA ========== */
+.stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.stars b {
+  position: absolute; border-radius: 50%; background: #fff;
+  display: block; opacity: .5;
+  animation: twinkle 3.4s ease-in-out infinite;
+}
+@keyframes twinkle { 0%, 100% { opacity: .18; transform: scale(.85); } 50% { opacity: .9; transform: scale(1.15); } }
+
+.zodia { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.zodia line { stroke: rgba(141, 156, 232, .25); stroke-width: 1; }
+.zodia circle { fill: rgba(141, 156, 232, .8); }
+
+.scene { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 46px 22px 120px; min-height: 100vh; }
+.scene-head { text-align: center; margin-bottom: 30px; }
+.scene-head .kicker { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.scene-head h2 { font-size: clamp(1.7rem, 4.6vw, 2.5rem); margin-top: 8px; letter-spacing: -.015em; }
+.scene-head h2 em { font-style: italic; background: linear-gradient(115deg, #e0527f, #8d9ce8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hint { text-align: center; color: var(--ink-soft); font-size: .9rem; font-weight: 300; margin-top: -18px; margin-bottom: 24px; }
+
+/* ---------- Órbitas ---------- */
+.cosmos { position: relative; aspect-ratio: 1 / .84; max-width: 860px; margin: 0 auto; }
+.orbit {
+  position: absolute; border-radius: 50%;
+  border: 1px dashed rgba(141, 156, 232, .22);
+}
+.planet {
+  position: absolute; z-index: 3; transform: translate(-50%, -50%);
+  border: 4px solid rgba(255, 255, 255, .92);
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, .06), 0 30px 60px rgba(6, 8, 22, .7);
+  cursor: pointer; transition: transform .28s cubic-bezier(.2,.8,.25,1), box-shadow .28s ease;
+  outline: none;
+}
+.planet:hover, .planet:focus-visible { transform: translate(-50%, -50%) scale(1.16); box-shadow: 0 0 0 10px rgba(240, 208, 142, .14), 0 34px 70px rgba(6, 8, 22, .75); }
+.planet .tag {
+  position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%);
+  background: #f0d08e; color: #171a33; font-size: .66rem; font-weight: 700;
+  padding: 3px 9px; border-radius: 999px; letter-spacing: .06em; white-space: nowrap;
+}
+.sun {
+  position: absolute; left: 50%; top: 47%; transform: translate(-50%, -50%);
+  width: 108px; height: 108px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #ffe7b8, #f0b96a 58%, #d99a4b);
+  box-shadow: 0 0 70px rgba(240, 185, 106, .45), inset -8px -10px 30px rgba(160, 96, 30, .5);
+  display: grid; place-items: center; text-align: center;
+}
+.sun span { font-family: "Fraunces", Georgia, serif; font-style: italic; font-size: 1.6rem; color: #563214; line-height: 1.05; }
+
+/* ---------- Eh世界各地 ---------- */
+.shooting { position: fixed; z-index: 2; pointer-events: none; width: 120px; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.9));
+  border-radius: 2px; opacity: 0; }
+.shooting.go { animation: shoot 2.6s ease-out forwards; }
+@keyframes shoot {
+  0% { transform: rotate(-24deg) translateX(-14vw); opacity: 0; }
+  12% { opacity: .9; }
+  55% { opacity: .25; }
+  100% { transform: rotate(-24deg) translateX(120vw); opacity: 0; }
+}
+
+/* ================= LIGHTBOX ================= */
+.lightbox {
+  position: fixed; inset: 0; z-index: 60;
+  display: grid; place-items: center; padding: 20px;
+  background: rgba(8, 10, 26, .68); backdrop-filter: blur(7px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+.lightbox.open { opacity: 1; visibility: visible; }
+.lb-card {
+  background: linear-gradient(170deg, #1d2145, #141631);
+  border: 1px solid rgba(141, 156, 232, .28);
+  border-radius: 22px; box-shadow: 0 40px 90px rgba(2, 3, 10, .8);
+  max-width: 430px; width: 100%; padding: 16px 16px 22px; text-align: center;
+  transform: translateY(16px) scale(.97);
+  transition: transform .35s cubic-bezier(.2, .8, .25, 1);
+}
+.lightbox.open .lb-card { transform: none; }
+.lb-photo { width: 100%; aspect-ratio: 1; border-radius: 15px; background-size: cover; background-position: center; box-shadow: 0 0 0 5px rgba(255,255,255,.12); }
+.lb-title { font-family: "Fraunces", serif; font-size: 1.3rem; margin: 16px 0 4px; }
+.lb-date { font-size: .74rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 10px; }
+.lb-msg { color: var(--ink-soft); font-weight: 300; line-height: 1.5; max-width: 36ch; margin: 0 auto; }
+.lb-close {
+  margin-top: 16px; border: none; background: none; font: inherit;
+  color: #f0d08e; font-weight: 600; cursor: pointer; padding: 6px 16px; border-radius: 999px;
+}
+.lb-close:hover { background: rgba(240, 208, 142, .12); }
+
+.foot {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; text-align: center;
+  padding: 12px 16px 16px; font-size: .82rem; color: rgba(232, 228, 247, .8);
+  background: linear-gradient(180deg, transparent, rgba(8, 10, 26, .85));
+  pointer-events: none;
+}
+.foot strong { font-weight: 600; }
+
+@media (max-width: 700px) {
+  .cosmos { aspect-ratio: 1 / 1.15; }
+  .sun { width: 82px; height: 82px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+  <div id="intro" class="intro">
+    <div>
+      <p class="intro-kicker">Recuerdos fuera de la gravedad</p>
+      <h1>Ana <em>&</em> Luis</h1>
+      <p>Una galaxia con su propia órbita: cada planeta es un momento que contarle a las estrellas.</p>
+      <button id="open-cosmos" class="open-btn" type="button">Entrar a la galaxia</button>
+    </div>
+  </div>
+
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <svg class="zodia" id="zodia" aria-hidden="true"></svg>
+
+  <main class="scene">
+    <header class="scene-head">
+      <p class="kicker">Galería espacial</p>
+      <h2>Tus recuerdos <em>en órbita</em>.</h2>
+    </header>
+    <p class="hint">Toca sus planetas — cada uno por cuenta de un momento.</p>
+
+    <div class="cosmos" id="cosmos">
+      <div class="sun" aria-hidden="true"><span>Ana<br>& Luis</span></div>
+    </div>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <article class="lb-card" role="dialog" aria-modal="true">
+      <div class="lb-photo" id="lb-photo"></div>
+      <h3 class="lb-title" id="lb-title">—</h3>
+      <p class="lb-date" id="lb-date">—</p>
+      <p class="lb-msg" id="lb-msg">—</p>
+      <button class="lb-close" id="lb-close" type="button">Volver a la galaxia</button>
+    </article>
+  </div>
+
+  <footer class="foot">
+    Flotando en <strong>Creaciones Milo</strong> &middot; Bolivia
+  </footer>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — cambia esto para entregar a cada cliente.
+   En 'photo' pon la URL real de cada foto (o déjalo vacío para
+   usar el placeholder de colores con sus iniciales).
+   ===================================================================== */
+const GALAXY = {
+  photos: [
+    { photo: '', initials: 'A', grad: 1, tag: '1ª órbita', title: 'Donde todo empezó', date: '14 feb 2021', msg: 'Dos tazas calientes y el resto de nuestras vidas.' },
+    { photo: '', initials: 'A&L', grad: 2, tag: 'constelación', title: 'Nuestro paseo al cine', date: 'mar 2021', msg: 'La película duró dos horas; las risas, hasta hoy.' },
+    { photo: '', initials: 'L', grad: 3, tag: 'supernova', title: 'El cumple sorpresa', date: 'dic 2021', msg: 'Una lluvia de verano, un pastel y muchísimas risas.' },
+    { photo: '', initials: 'A', grad: 4, tag: 'nebulosa', title: 'La casa de los domingos', date: 'ago 2022', msg: 'Música alta, platos sucios y planes que no acaban.' },
+    { photo: '', initials: 'A&L', grad: 5, tag: 'luna nueva', title: 'Un viaje y medio', date: 'jul 2023', msg: 'La carretera se volvió nuestro mejor lugar.' },
+    { photo: '', initials: 'L', grad: 6, tag: 'eclipse', title: 'Hoy', date: 'hoy', msg: 'Y seguimos girando juntos… sin brújula y sin prisa.' }
+  ]
+};
+
+const GRADS = [
+  ['#e0527f', '#a6486a'],
+  ['#c78b5e', '#743142'],
+  ['#2f9e83', '#58c2a5'],
+  ['#6a7fdb', '#8d9ce8'],
+  ['#bd9152', '#e0b884'],
+  ['#743142', '#5b2534']
+];
+
+function photoURL(p) {
+  if (p.photo) return p.photo;
+  const [c1, c2] = GRADS[(p.grad || 1) % GRADS.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360" viewBox="0 0 360 360">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
+    </linearGradient></defs>
+    <rect width="360" height="360" fill="url(#g)"/>
+    <g fill="rgba(255,255,255,.16)"><circle cx="56" cy="64" r="6"/><circle cx="300" cy="300" r="7"/><circle cx="88" cy="300" r="4"/></g>
+    <text x="180" y="212" text-anchor="middle" font-family="Georgia, serif" font-size="76" font-style="italic" fill="rgba(255,255,255,.92)">${(p.initials || '♥').replace(/&/g, '&amp;')}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+/* ---------- Estrellas ---------- */
+const starsBox = document.getElementById('stars');
+for (let i = 0; i < 110; i += 1) {
+  const b = document.createElement('b');
+  const s = 1 + Math.random() * 2.4;
+  b.style.width = s + 'px';
+  b.style.height = s + 'px';
+  b.style.left = (Math.random() * 100) + 'vw';
+  b.style.top = (Math.random() * 100) + 'vh';
+  b.style.animationDelay = (Math.random() * 3.4) + 's';
+  starsBox.appendChild(b);
+}
+
+/* ---------- Constelación decorativa ---------- */
+const z = document.getElementById('zodia');
+z.setAttribute('width', '100%');
+z.setAttribute('height', '100%');
+z.setAttribute('viewBox', '0 0 1200 900');
+z.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+const zPts = [ [80,120],[150,90],[220,140],[190,214] ];
+z.innerHTML =
+  `<g>${zPts.map(function(pt){return '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="2.4"/>';}).join('')}
+   ${zPts.slice(0,-1).map(function(pt,i){return '<line x1="'+pt[0]+'" y1="'+pt[1]+'" x2="'+zPts[i+1][0]+'" y2="'+zPts[i+1][1]+'"/>';}).join('')}
+   <g transform="translate(940 130)">
+     ${[[0,0],[44,30],[86,12],[120,-16],[74,-30]].map(function(pt){return '<circle cx="'+pt[0]+'" cy="'+pt[1]+'" r="2.4"/>';}).join('')}
+     ${[[0,0],[44,30],[86,12],[120,-16]].map(function(pt,i){return '<line x1="'+pt[0]+'" y1="'+pt[1]+'" x2="'+[[44,30],[86,12],[120,-16],[74,-30]][i][0]+'" y2="'+[[44,30],[86,12],[120,-16],[74,-30]][i][1]+'"/>';}).join('')}
+   </g></g>`;
+
+/* ---------- Planetas ---------- */
+const cosmos = document.getElementById('cosmos');
+const ORBITS = [
+  { r: 26 }, { r: 42 }, { r: 58 }
+];
+const SIZES = [64, 84, 106];
+
+GALAXY.photos.forEach(function (p, i) {
+  const orbit = ORBITS[Math.min(ORBITS.length - 1, i % ORBITS.length)];
+  const el = document.createElement('div');
+  const ring = document.createElement('div');
+
+  ring.className = 'orbit';
+  ring.style.width = (orbit.r * 1.62) + '%';
+  ring.style.height = (orbit.r * 1.62) + '%';
+  ring.style.left = ((100 - orbit.r * 1.62) / 2) + '%';
+  ring.style.top = ((100 - orbit.r * 1.62) / 2) + '%';
+  cosmos.appendChild(ring);
+
+  const size = SIZES[Math.min(SIZES.length - 1, i % SIZES.length)];
+  const angle = (i / GALAXY.photos.length) * Math.PI * 2 - Math.PI / 2;
+
+  // La órbita en porcentaje del ancho del contenedor (el cosmos suele ser un cuadrado)
+  const px = 50 + 24 * Math.cos(angle) * (1.62 * orbit.r / 100) * 1.06;
+  const py = 50 + 24 * Math.sin(angle) * (1.62 * orbit.r / 100) * 1.06 * 0.84;
+
+  el.className = 'planet';
+  el.style.width = size + 'px';
+  el.style.height = size + 'px';
+  el.style.left = Math.min(96, Math.max(4, px)) + '%';
+  el.style.top = Math.min(96, Math.max(4, py)) + '%';
+  el.style.backgroundImage = "url('" + photoURL(p) + "')";
+  el.style.backgroundSize = 'cover';
+  el.style.backgroundPosition = 'center';
+  el.style.animation = 'none';
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.setAttribute('aria-label', p.title);
+  if (p.tag) el.innerHTML = `<span class="tag">${p.tag}</span>`;
+  el.addEventListener('click', function () { openLightbox(p); });
+  el.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') openLightbox(p); });
+  cosmos.appendChild(el);
+});
+
+/* ---------- Lightbox ---------- */
+const lb = document.getElementById('lightbox');
+const lbPhoto = document.getElementById('lb-photo');
+const lbTitle = document.getElementById('lb-title');
+const lbDate = document.getElementById('lb-date');
+const lbMsg = document.getElementById('lb-msg');
+
+function openLightbox(p) {
+  lbPhoto.style.backgroundImage = "url('" + photoURL(p) + "')";
+  lbTitle.textContent = p.title;
+  lbDate.textContent = p.date || '';
+  lbMsg.textContent = p.msg || '';
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden', 'false');
+  document.getElementById('lb-close').focus();
+}
+function closeLightbox() {
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden', 'true');
+}
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+lb.addEventListener('click', function (event) { if (event.target === lb) closeLightbox(); });
+document.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeLightbox(); });
+
+/* ---------- Intro ---------- */
+document.getElementById('open-cosmos').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hidden');
+});
+
+/* ---------- Estrellas fugaces ---------- */
+setInterval(function () {
+  if (document.hidden) return;
+  const s = document.createElement('div');
+  s.className = 'shooting';
+  s.style.top = (8 + Math.random() * 40) + 'vh';
+  s.style.left = '-10vw';
+  s.classList.add('go');
+  document.body.appendChild(s);
+  setTimeout(function () { s.remove(); }, 2700);
+}, 4200);
+</script>
+</body>
+</html>

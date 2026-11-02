@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Árbol de recuerdos — Ana & Luis</title>
+<meta name="description" content="Un árbol que guarda sus fotos y sus momentos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f1e7;
+  --panel: #fffdf8;
+  --ink: #35412b;
+  --ink-soft: #6b7358;
+  --leaf-1: #4c6b3c;
+  --leaf-2: #77955c;
+  --leaf-3: #a3b878;
+  --trunk: #8a6a4a;
+  --gold: #bd9152;
+  --rose: #e0527f;
+  --wine: #743142;
+  --shadow: 0 18px 44px rgba(53, 65, 43, 0.18);
+  --radius: 18px;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body {
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
+
+/* ================= INTRO ================= */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background:
+    radial-gradient(40rem 26rem at 70% 20%, rgba(189, 145, 82, 0.16), transparent 60%),
+    radial-gradient(36rem 26rem at 20% 85%, rgba(76, 107, 60, 0.14), transparent 62%),
+    var(--bg);
+  transition: opacity .8s ease, visibility .8s ease;
+}
+.intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-kicker {
+  font-size: .78rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold);
+}
+.intro h1 {
+  font-size: clamp(2.6rem, 8vw, 4.6rem);
+  line-height: 1.02;
+  margin: 14px 0 10px;
+  letter-spacing: -.02em;
+}
+.intro h1 em {
+  font-style: italic;
+  color: var(--leaf-1);
+}
+.intro p {
+  color: var(--ink-soft);
+  max-width: 46ch;
+  margin: 0 auto 26px;
+  font-weight: 300;
+  font-size: 1.05rem;
+}
+.open-btn {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  padding: 15px 34px;
+  border-radius: 999px;
+  background: linear-gradient(115deg, #4c6b3c, #77955c);
+  box-shadow: 0 16px 34px rgba(76, 107, 60, .35);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.open-btn:hover { transform: translateY(-2px); box-shadow: 0 20px 42px rgba(76, 107, 60, .45); }
+.intro-heart { font-size: 2rem; margin-top: 30px; display: block; animation: beat 1.6s ease-in-out infinite; opacity: .8; }
+.intro-heart svg { width: 34px; height: 34px; fill: var(--rose); }
+@keyframes beat { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.25); } }
+
+/* ================= ESCENA ================= */
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(52rem 34rem at 82% 8%, rgba(189, 145, 82, 0.16), transparent 60%),
+    radial-gradient(48rem 30rem at 12% 90%, rgba(77, 95, 60, 0.14), transparent 62%);
+}
+.hill {
+  position: fixed;
+  left: -10vw;
+  right: -10vw;
+  bottom: -12vh;
+  height: 34vh;
+  z-index: 0;
+  background: linear-gradient(180deg, #b7c48f, #96a86c 70%, #86995c);
+  border-radius: 100% 90% 0 0;
+  box-shadow: inset 0 26px 40px rgba(255, 255, 255, .18);
+}
+.scene {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 42px 22px 130px;
+  min-height: 100vh;
+}
+.scene-head { text-align: center; margin-bottom: 6px; }
+.scene-head .kicker {
+  font-size: .74rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--gold);
+}
+.scene-head h2 {
+  font-size: clamp(1.6rem, 4.4vw, 2.3rem);
+  letter-spacing: -.015em;
+  margin-top: 8px;
+}
+.scene-head h2 em { font-style: italic; color: var(--leaf-1); }
+.hint {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: .9rem;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+
+/* ---------- Árbol ---------- */
+.tree-wrap {
+  position: relative;
+  margin: -30px auto 0;
+  width: min(760px, 94vw);
+  aspect-ratio: 760 / 620;
+}
+.tree-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.tree-svg .trunk { fill: var(--trunk); }
+.tree-svg .limb { fill: none; stroke: var(--trunk); stroke-linecap: round; }
+.tree-svg .crown { fill: #607f47; opacity: .96; }
+.tree-svg .crown2 { fill: #77955c; }
+.tree-svg .crown3 { fill: #8ea874; }
+.tree-svg .glow { fill: #ffdf9e; opacity: .8; }
+
+/* ---------- Fotos colgantes ---------- */
+.bauble {
+  position: absolute;
+  width: 84px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transform-origin: top center;
+  transition: filter .25s ease;
+  z-index: 3;
+  outline: none;
+}
+.bauble:hover, .bauble:focus-visible { filter: drop-shadow(0 16px 22px rgba(53, 65, 43, .35)); z-index: 4; }
+.bauble .string {
+  display: block;
+  width: 2px;
+  height: 26px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(53, 65, 43, .55), rgba(53, 65, 43, .25));
+}
+.bauble.swing { animation: swing 4.2s ease-in-out infinite; }
+@keyframes swing { 0%, 100% { transform: rotate(-3.5deg); } 50% { transform: rotate(3.5deg); } }
+.photo {
+  display: block;
+  width: 84px;
+  height: 84px;
+  border-radius: 16px;
+  border: 4px solid #fffdf8;
+  box-shadow: var(--shadow);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.photo::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--gold);
+  box-shadow: inset 2px 2px 0 rgba(255, 253, 248, .5);
+}
+
+/* ---------- Hojas que caen ---------- */
+.leaf-fall {
+  position: fixed;
+  top: -30px;
+  z-index: 2;
+  pointer-events: none;
+  fill: #77955c;
+  opacity: .5;
+  animation: leafdrop linear infinite;
+}
+@keyframes leafdrop {
+  from { transform: translate3d(0, -32px, 0) rotate(0deg); }
+  to { transform: translate3d(-9vw, 108vh, 0) rotate(420deg); }
+}
+
+/* ---------- Placa ---------- */
+.plaque {
+  position: relative;
+  margin: 8px auto 0;
+  width: fit-content;
+  background: linear-gradient(160deg, #f3e4c8, #e3cd9f);
+  color: #5c4426;
+  border-radius: 12px;
+  padding: 10px 22px 12px;
+  font-family: "Fraunces", serif;
+  font-size: .95rem;
+  letter-spacing: .04em;
+  box-shadow: 0 10px 24px rgba(92, 68, 38, .25);
+  border: 1px solid rgba(255, 253, 248, .6);
+  text-align: center;
+}
+
+/* ================= LIGHTBOX ================= */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(43, 52, 30, .55);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+.lightbox.open { opacity: 1; visibility: visible; }
+.lb-card {
+  background: var(--panel);
+  border-radius: 22px;
+  box-shadow: 0 40px 90px rgba(20, 26, 12, .5);
+  max-width: 420px;
+  width: 100%;
+  padding: 14px 14px 20px;
+  text-align: center;
+  transform: translateY(14px) scale(.97);
+  transition: transform .35s cubic-bezier(.2, .8, .25, 1);
+}
+.lightbox.open .lb-card { transform: none; }
+.lb-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  background-size: cover;
+  background-position: center;
+  border: 5px solid #fff;
+  box-shadow: 0 10px 26px rgba(53, 65, 43, .25);
+}
+.lb-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.25rem;
+  margin: 16px 0 4px;
+  letter-spacing: -.01em;
+}
+.lb-date {
+  font-size: .74rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.lb-msg {
+  color: var(--ink-soft);
+  font-weight: 300;
+  font-size: .97rem;
+  line-height: 1.5;
+  max-width: 34ch;
+  margin: 0 auto;
+}
+.lb-close {
+  margin-top: 16px;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--leaf-1);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: 999px;
+}
+.lb-close:hover { background: rgba(76, 107, 60, .1); }
+
+/* ================= FOOTER ================= */
+.foot {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  text-align: center;
+  padding: 12px 16px 16px;
+  font-size: .82rem;
+  color: #f7f3e8;
+  background: linear-gradient(180deg, transparent, rgba(66, 78, 44, .75));
+  pointer-events: none;
+}
+.foot strong { font-weight: 600; letter-spacing: .02em; }
+
+@media (max-width: 700px) {
+  .tree-wrap { aspect-ratio: 720 / 900; width: 100vw; margin-left: -3vw; }
+  .bauble { width: 64px; }
+  .photo { width: 64px; height: 64px; border-radius: 13px; }
+  .bauble .string { height: 20px; }
+  .scene { padding: 30px 16px 110px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+  <div id="intro" class="intro">
+    <div>
+      <p class="intro-kicker">Un regalo de papel y raíces</p>
+      <h1>Ana <em>&</em> Luis</h1>
+      <p>Un árbol que guarda todos sus recuerdos: cada foto es un fruto. Toca cada uno para volver a ese momento.</p>
+      <button id="open-tree" class="open-btn" type="button">Abrir nuestro árbol</button>
+      <span class="intro-heart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.5-7.5-9.6A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 3.4C19.5 16.5 12 21 12 21Z"/></svg></span>
+    </div>
+  </div>
+
+  <div class="sky" aria-hidden="true"></div>
+  <div class="hill" aria-hidden="true"></div>
+
+  <main class="scene">
+    <header class="scene-head">
+      <p class="kicker">Árbol de recuerdos</p>
+      <h2>Cada foto, un fruto <em>que no se cae</em>.</h2>
+    </header>
+    <p class="hint">Toca las fotos del árbol para revivir cada momento.</p>
+
+    <div class="tree-wrap" id="tree" role="img" aria-label="Árbol con fotos colgantes">
+      <svg id="tree-svg" class="tree-svg" viewBox="0 0 760 620" aria-hidden="true"></svg>
+      <!-- baubles via JS -->
+    </div>
+
+    <div class="plaque">Creció entre nosotros &middot; <strong>2021 — 2026</strong></div>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <article class="lb-card" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+      <div class="lb-photo" id="lb-photo"></div>
+      <h3 class="lb-title" id="lb-title">—</h3>
+      <p class="lb-date" id="lb-date">—</p>
+      <p class="lb-msg" id="lb-msg">—</p>
+      <button class="lb-close" id="lb-close" type="button">Volver al árbol</button>
+    </article>
+  </div>
+
+  <footer class="foot">
+    Hecho con cariño por <strong>Creaciones Milo</strong> &middot; Bolivia
+  </footer>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — para entregar a un cliente, solo edita este bloque:
+   - foto: pon 'src' con la URL/ruta de la foto real. Si omites 'src',
+     se genera un marco con degradado y sus iniciales (placeholder).
+   ===================================================================== */
+const TREE = {
+  pair: 'Ana & Luis',
+  range: '2021 — 2026',
+  photos: [
+    { src: '', initials: 'A', grad: 1, title: 'Donde todo empezó', date: '14 feb 2021', msg: 'Un café, dos tazas y una conversación que no terminó nunca.' },
+    { src: '', initials: 'A&L', grad: 2, title: 'La primera cita', date: '2 mar 2021', msg: 'Llegamos tarde a la función… y no nos importó nada.' },
+    { src: '', initials: 'L', grad: 3, title: 'Nuestro paseo al parque', date: 'jun 2021', msg: 'Un cielo lleno de cometas y risas.' },
+    { src: '', initials: 'A', grad: 4, title: 'La casa de los domingos', date: 'ago 2021', msg: 'Platos sucios, música alta y planes que no acaban.' },
+    { src: '', initials: 'A&L', grad: 5, title: 'Un viaje y medio', date: 'dic 2021', msg: 'La carretera, nuestro mejor lugar.' },
+    { src: '', initials: 'L', grad: 6, title: 'El cumple sorpresa', date: 'mar 2022', msg: 'Un pastel, velas y muchísima risa.' },
+    { src: '', initials: 'A', grad: 7, title: 'Mascotas y mañanas', date: 'may 2023', msg: 'Con patas y todo, la casa cobró vida.' },
+    { src: '', initials: 'A&L', grad: 8, title: 'Ayer, hoy y mañana', date: 'hoy', msg: 'Seguimos creciendo fruto a fruto, año a año.' }
+  ]
+};
+
+/* ----------_Array ---------- */
+const GRADS = [
+  ['#e0527f', '#a6486a'],
+  ['#c78b5e', '#743142'],
+  ['#2f9e83', '#58c2a5'],
+  ['#6a7fdb', '#8d9ce8'],
+  ['#bd9152', '#e0b884'],
+  ['#743142', '#5b2534'],
+  ['#58c2a5', '#c78b5e'],
+  ['#a6486a', '#e0b884'],
+  ['#8d9ce8', '#743142']
+];
+
+function photoURL(p) {
+  if (p.src) return p.src;
+  const [c1, c2] = GRADS[(p.grad || 1) % GRADS.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360" viewBox="0 0 360 360">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
+    </linearGradient>
+    <radialGradient id="h" cx=".5" cy=".36" r=".55">
+      <stop offset="0" stop-color="rgba(255,255,255,.30)"/><stop offset="1" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient></defs>
+    <rect width="360" height="360" fill="url(#g)"/>
+    <rect width="360" height="360" fill="url(#h)"/>
+    <g fill="rgba(255,255,255,.16)">
+      <circle cx="52" cy="70" r="7"/><circle cx="318" cy="54" r="5"/><circle cx="300" cy="318" r="8"/><circle cx="60" cy="300" r="5"/>
+    </g>
+    <path transform="translate(180 168) scale(3.2)" fill="rgba(255,255,255,.5)"
+      d="M0 16s-11-6.6-11-14A6 6 0 0 1 0-6a6 6 0 0 1 11 4C11 9.4 0 16 0 16Z" opacity=".35"/>
+    <text x="180" y="238" text-anchor="middle" font-family="Georgia, serif" font-size="78" font-style="italic" fill="rgba(255,255,255,.9)">${(p.initials || '').replace(/&/g, '&amp;')}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+/* ---------- Vermas ---------- */
+/* Árbol: tronco + copa + 8 puntos de anclaje (porcentajes del viewBox) */
+const ANCHORS = [ // coords viewBox 760x620 -> ajusta si cambias el SVG
+  { x: 170, y: 208 }, { x: 322, y: 96 }, { x: 452, y: 140 }, { x: 596, y: 130 },
+  { x: 120, y: 300 }, { x: 618, y: 258 }, { x: 240, y: 128 }, { x: 520, y: 66 }
+];
+
+const treeSvg = document.getElementById('tree-svg');
+treeSvg.innerHTML = `
+  <g>
+    <path class="trunk" d="M356 620 C352 520 350 452 344 408 C338 364 322 330 296 302
+      C270 274 238 258 198 246 L204 226 C238 240 268 258 292 280 C316 304 328 330 334 356
+      C340 322 348 292 366 266 C384 240 412 218 446 200 L456 220 C424 238 400 258 386 282
+      C372 306 364 336 360 372 C356 410 356 470 358 540 L360 620 Z"/>
+    <g class="limb" stroke-width="14">
+      <path d="M348 470 C300 456 250 434 216 396 C196 372 188 344 186 314"/>
+      <path d="M352 452 C402 438 450 416 482 380 C502 358 512 330 514 302"/>
+      <path d="M348 420 C310 392 286 356 276 312 C270 284 270 256 276 228"/>
+      <path d="M356 380 C376 348 404 322 438 304 C462 292 488 286 514 286"/>
+    </g>
+    <g class="crown">
+      <ellipse cx="200" cy="252" rx="118" ry="82"/>
+      <ellipse cx="326" cy="180" rx="150" ry="96"/>
+      <ellipse cx="480" cy="196" rx="140" ry="88"/>
+      <ellipse cx="590" cy="268" rx="96" ry="66"/>
+      <ellipse cx="140" cy="330" rx="84" ry="56"/>
+    </g>
+    <g class="crown2" opacity=".8">
+      <ellipse cx="250" cy="150" rx="70" ry="44"/>
+      <ellipse cx="410" cy="120" rx="76" ry="46"/>
+      <ellipse cx="540" cy="180" rx="64" ry="40"/>
+    </g>
+    <g class="crown3" opacity=".5">
+      <ellipse cx="180" cy="300" rx="40" ry="26"/>
+      <ellipse cx="360" cy="256" rx="46" ry="28"/>
+      <ellipse cx="520" cy="252" rx="40" ry="24"/>
+    </g>
+    <g class="glow">
+      <circle cx="204" cy="216" r="7"/><circle cx="322" cy="140" r="5"/><circle cx="452" cy="160" r="6"/><circle cx="596" cy="216" r="5"/>
+    </g>
+  </g>
+`;
+
+/* ---------- Fotos colgantes ---------- */
+const treeWrap = document.getElementById('tree');
+const vb = treeSvg.viewBox.baseVal;
+const aspect = vb.height / vb.width;
+
+TREE.photos.forEach(function (p, i) {
+  const a = ANCHORS[i % ANCHORS.length];
+  const el = document.createElement('button');
+  el.type = 'button';
+  el.className = 'bauble swing';
+  el.style.left = (a.x / vb.width * 100) + '%';
+  el.style.top = (a.y / vb.height * 100) + '%';
+  el.style.marginLeft = '-42px';
+  el.style.animationDelay = (i * 0.55) + 's';
+  el.setAttribute('aria-label', p.title);
+  el.innerHTML = `<span class="string" aria-hidden="true"></span>
+    <span class="photo" style="background-image:url('${photoURL(p)}')" aria-hidden="true"></span>`;
+  el.addEventListener('click', function () { openLightbox(p); });
+  treeWrap.appendChild(el);
+});
+
+/* ---------- Lightbox ---------- */
+const lb = document.getElementById('lightbox');
+const lbPhoto = document.getElementById('lb-photo');
+const lbTitle = document.getElementById('lb-title');
+const lbDate = document.getElementById('lb-date');
+const lbMsg = document.getElementById('lb-msg');
+
+function openLightbox(p) {
+  lbPhoto.style.backgroundImage = "url('" + photoURL(p) + "')";
+  lbTitle.textContent = p.title;
+  lbDate.textContent = p.date || '';
+  lbMsg.textContent = p.msg || '';
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden', 'false');
+  document.getElementById('lb-close').focus();
+}
+
+function closeLightbox() {
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden', 'true');
+}
+
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+lb.addEventListener('click', function (event) { if (event.target === lb) closeLightbox(); });
+document.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeLightbox(); });
+
+/* ---------- Intro ---------- */
+document.getElementById('open-tree').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hidden');
+});
+
+/* ---------- Hojas ---------- */
+const LEAVES = 9;
+for (let i = 0; i < LEAVES; i += 1) {
+  const leaf = document.createElement('div');
+  leaf.className = 'leaf-fall';
+  leaf.style.left = (4 + Math.random() * 92) + 'vw';
+  leaf.style.animationDuration = (9 + Math.random() * 8) + 's';
+  leaf.style.animationDelay = (-14 * Math.random()) + 's';
+  const size = 14 + Math.random() * 12;
+  leaf.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 24 24"><path d="M12 2C7 5 4 9 4 13a8 8 0 0 0 16 0c0-4-3-8-8-11Z" transform="rotate(30 12 12)" fill="#77955c" opacity=".9"/></svg>`;
+  document.body.appendChild(leaf);
+}
+</script>
+</body>
+</html>

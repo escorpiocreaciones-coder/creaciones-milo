@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantillas digitales — Creaciones Milo</title>
+<meta name="description" content="Plantillas digitales personalizadas: árbol de recuerdos, galería espacial, polaroids, línea del tiempo, cartas y cápsula del tiempo.">
+<meta name="theme-color" content="#743142">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fdf9f4;
+  --ink: #2f222c;
+  --ink-soft: #6a5b62;
+  --wine: #743142;
+  --rose: #e0527f;
+  --gold: #c78b5e;
+  --jade: #2f9e83;
+  --sky: #6a7fdb;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(40rem 26rem at 12% 8%, rgba(224, 82, 127, .1), transparent 60%),
+    radial-gradient(46rem 30rem at 88% 6%, rgba(201, 139, 94, .12), transparent 62%),
+    var(--bg);
+  min-height: 100vh;
+}
+h1, h2, h3 { font-family: "Fraunces", Georgia, serif; letter-spacing: -.015em; }
+
+.top { max-width: 1060px; margin: 0 auto; padding: 64px 22px 12px; text-align: center; }
+.jump {
+  display: inline-block; color: var(--wine); font-weight: 600; text-decoration: none;
+  font-size: .9rem; margin-bottom: 22px; opacity: .8;
+}
+.jump:hover { opacity: 1; }
+.top .kicker { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.top h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); margin: 10px 0 10px; }
+.top h1 em { font-style: italic; background: linear-gradient(115deg, var(--wine), var(--rose)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.top p { color: var(--ink-soft); font-weight: 300; max-width: 62ch; margin: 0 auto; }
+
+.grid {
+  max-width: 1060px;
+  margin: 34px auto 0;
+  padding: 0 22px 70px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.tpl {
+  border: 1px solid #e4d5c9;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 10px 26px rgba(47, 34, 44, .06);
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.tpl:hover { transform: translateY(-6px); box-shadow: 0 22px 44px rgba(47, 34, 44, .14); }
+.tpl .art { height: 150px; position: relative; }
+.tpl .art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tpl .body { padding: 16px 18px 20px; flex: 1; display: flex; flex-direction: column; }
+.tpl .num { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+.tpl h3 { font-size: 1.16rem; margin: 5px 0 6px; }
+.tpl p { color: var(--ink-soft); font-size: .88rem; font-weight: 300; line-height: 1.45; flex: 1; }
+.tpl .go { font-weight: 600; color: var(--wine); font-size: .9rem; margin-top: 12px; }
+.tpl:hover .go { color: var(--rose); }
+
+.n1 .num { color: #2f9e83; } .n1 .art { background: linear-gradient(135deg, #b7c48f, #86995c); }
+.n2 .num { color: #6a7fdb; } .n2 .art { background: radial-gradient(circle at 30% 30%, #2b2e55, #141631 70%); }
+.n3 .num { color: #a5793f; } .n3 .art { background: linear-gradient(135deg, #e9e2d5, #d9cdb9); }
+.n4 .num { color: #a5793f; } .n4 .art { background: linear-gradient(135deg, #f3e6d9, #e6d2c0); }
+.n5 .num { color: #743142; } .n5 .art { background: linear-gradient(135deg, #f7e8d6, #ecd4ba); }
+.n6 .num { color: #e0b884; } .n6 .art { background: radial-gradient(circle at 50% 108%, #5a2c44, #241828 70%); }
+.n7 .num { color: #94496d; } .n7 .art { background: linear-gradient(135deg, #f6ede5, #e7d3c5); }
+
+@media (max-width: 940px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <header class="top">
+    <a class="jump" href="../index.html">&larr; Volver a la tienda de Creaciones Milo</a>
+    <p class="kicker">Creaciones Milo · Bolivia</p>
+    <h1>Plantillas <em>digitales</em></h1>
+    <p>Experiencias personalizadas con sus fotos y sus palabras: como el libro, cada plantilla se adapta a su historia y se entrega lista para abrir.</p>
+  </header>
+
+  <main class="grid">
+    <a class="tpl n7" href="../libro-demo.html">
+      <div class="art"><svg viewBox="0 0 300 150"><rect x="70" y="30" width="70" height="92" rx="6" fill="#fff"/><rect x="160" y="30" width="70" height="92" rx="6" fill="#f3ddd1"/><rect x="82" y="44" width="34" height="24" rx="4" fill="#cf9d92"/><rect x="82" y="78" width="44" height="30" rx="4" fill="#7d5a5a"/><rect x="172" y="44" width="46" height="58" rx="4" fill="#b0626f"/></svg></div>
+      <div class="body">
+        <span class="num">N.º 1</span>
+        <h3>Libro digital</h3>
+        <p>Su historia como un libro que se abre: fotos, textos y hasta su canción.</p>
+        <span class="go" data-num="1">Abrir demo &rarr;</span>
+      </div>
+    </a>
+
+    <a class="tpl n1" href="arbol.html">
+      <div class="art"><svg viewBox="0 0 300 150"><circle cx="150" cy="64" r="46" fill="#5d7a46"/><circle cx="108" cy="78" r="30" fill="#6d8a53"/><circle cx="196" cy="78" r="30" fill="#6d8a53"/><path d="M150 132 C148 116 146 104 138 96 L162 96 C154 104 152 116 150 132 Z" fill="#8a6a4a"/><circle cx="118" cy="66" r="9" fill="#f6cf76"/><circle cx="176" cy="52" r="9" fill="#e3a4b4"/><circle cx="150" cy="82" r="9" fill="#a3c585"/></svg></div>
+      <div class="body">
+        <span class="num">N.º 2</span>
+        <h3>Árbol de recuerdos</h3>
+        <p>Un árbol con sus fotos colgando como frutos; caen hojas y crecen los recuerdos.</p>
+        <span class="go">Abrir demo &rarr;</span>
+      </div>
+    </a>
+
+    <a class="tpl n2" href="espacio.html">
+      <div class="art"><svg viewBox="0 0 300 150"><rect width="300" height="150" fill="#141631"/><circle cx="150" cy="86" r="18" fill="#f0b96a"/><circle cx="64" cy="66" r="12" fill="#e0527f"/><circle cx="236" cy="58" r="12" fill="#6a7fdb"/><circle cx="196" cy="112" r="9" fill="#58c2a5"/><g fill="#fff" opacity=".7"><circle cx="30" cy="26" r="1.4"/><circle cx="90" cy="18" r="1.2"/><circle cx="252" cy="30" r="1.4"/><circle cx="272" cy="92" r="1.2"/><circle cx="44" cy="112" r="1.2"/></g></svg></div>
+      <div class="body">
+        <span class="num">N.º 3</span>
+        <h3>Galería en el espacio</h3>
+        <p>Sus recuerdos como planetas en órbita entre estrellas y constelaciones.</p>
+        <span class="go">Abrir demo &rarr;</span>
+      </div>
+    </a>
+
+    <a class="tpl n3" href="polaroids.html">
+      <div class="art"><svg viewBox="0 0 300 150"><rect x="42" y="34" width="92" height="102" fill="#fff"/><rect x="52" y="44" width="72" height="66" fill="#743142"/><rect x="164" y="22" width="92" height="102" fill="#fbf7ea"/><rect x="174" y="32" width="72" height="66" fill="#c78b5e"/><text x="88" y="127" text-anchor="middle" font-family="Georgia" font-style="italic" font-size="14" fill="#33302a">café nº1</text></svg></div>
+      <div class="body">
+        <span class="num">N.º 4</span>
+        <h3>Polaroids flotantes</h3>
+        <p>Fotos reveladas que caen sobre su mesa, con nota manuscrita al dorso.</p>
+        <span class="go">Abrir demo &rarr;</span>
+      </div>
+    </a>
+
+    <a class="tpl n4" href="timeline.html">
+      <div class="art"><svg viewBox="0 0 300 150"><line x1="150" y1="12" x2="150" y2="138" stroke="#dcc3c9" stroke-width="4"/><circle cx="150" cy="30" r="8" fill="#743142"/><circle cx="150" cy="75" r="8" fill="#e0527f"/><circle cx="150" cy="120" r="8" fill="#c78b5e"/><rect x="170" y="18" width="86" height="24" rx="8" fill="#f6dde4"/><rect x="44" y="62" width="86" height="24" rx="8" fill="#f6dde4"/><rect x="170" y="106" width="86" height="24" rx="8" fill="#f6dde4"/></svg></div>
+      <div class="body">
+        <span class="num">N.º 5</span>
+        <h3>Línea del tiempo</h3>
+        <p>Su historia scrolleada: del primer día hasta hoy, con fechas y fotos.</p>
+        <span class="go">Abrir demo &rarr;</span>
+      </div>
+    </a>
+
+    <a class="tpl n5" href="cartas.html">
+      <div class="art"><svg viewBox="0 0 300 150"><rect x="90" y="42" width="120" height="78" rx="10" fill="#f0dab8"/><path d="M90 42 L150 92 L210 42 Z" fill="#ecccab"/><circle cx="150" cy="30" r="12" fill="#e0527f"/></svg></div>
+      <div class="body">
+        <span class="num">N.º 6</span>
+        <h3>Cartas del corazón</h3>
+        <p>Un sobre con cartas que se voltean: cada una guarda una foto y una promesa.</p>
+        <span class="go">Abrir demo &rarr;</span>
+      </div>
+    </a>
+
+    <a class="tpl n6" href="capsula.html">
+      <div class="art"><svg viewBox="0 0 300 150"><rect width="300" height="150" fill="#241828"/><path d="M108 92 L108 62 L192 62 L192 92 Z" fill="#4a2536"/><path d="M104 58 L150 40 L196 58 L196 66 L104 66 Z" fill="#6b3a4e"/><circle cx="150" cy="58" r="7" fill="#e0b884"/><circle cx="150" cy="112" r="26" fill="rgba(255,220,160,.16)"/></svg></div>
+      <div class="body">
+        <span class="num">N.º 7</span>
+        <h3>Cápsula del tiempo</h3>
+        <p>Una caja digital que se abre paso a paso, sellada para una fecha especial.</p>
+        <span class="go">Abrir demo &rarr;</span>
+      </div>
+    </a>
+  </main>
+</body>
+</html>

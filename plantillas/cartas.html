@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartas del corazón — Ana & Luis</title>
+<meta name="description" content="Un sobre con cartas que se voltean y revelan sus fotos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3e6d9;
+  --paper: #fffaf2;
+  --ink: #40302a;
+  --ink-soft: #85706a;
+  --wine: #743142;
+  --rose: #e0527f;
+  --gold: #b8854b;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  font-family: "Outfit", "Segoe UI", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(40rem 26rem at 82% 12%, rgba(224, 82, 127, .12), transparent 60%),
+    radial-gradient(44rem 30rem at 10% 88%, rgba(184, 133, 75, .14), transparent 62%),
+    var(--bg);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
+
+/* ============ INTRO ============ */
+.intro {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; place-items: center; text-align: center;
+  background: inherit;
+  transition: opacity .7s ease, visibility .7s ease;
+}
+.intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro-kicker { font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.intro h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); margin: 12px 0 8px; letter-spacing: -.02em; }
+.intro h1 em { font-style: italic; color: var(--rose); }
+.intro p { color: var(--ink-soft); max-width: 42ch; margin: 0 auto 26px; font-weight: 300; }
+.open-btn {
+  border: none; cursor: pointer; font: inherit; font-weight: 600; color: #fff;
+  padding: 15px 34px; border-radius: 999px;
+  background: linear-gradient(115deg, #743142, #a6486a);
+  box-shadow: 0 16px 34px rgba(116, 49, 66, .3);
+  transition: transform .2s ease;
+}
+.open-btn:hover { transform: translateY(-2px); }
+
+/* ============ SOBRE + CARTAS ============ */
+.scene { max-width: 1010px; margin: 0 auto; padding: 44px 20px 120px; }
+.scene-head { text-align: center; margin-bottom: 10px; }
+.scene-head .kicker { font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 700; color: var(--gold); }
+.scene-head h2 { font-size: clamp(1.7rem, 4.6vw, 2.4rem); margin-top: 8px; letter-spacing: -.015em; }
+.scene-head h2 em { font-style: italic; color: var(--rose); }
+.hint { text-align: center; color: var(--ink-soft); font-weight: 300; font-size: .92rem; margin-bottom: 28px; }
+
+.envelope {
+  position: relative;
+  width: fit-content;
+  margin: 96px auto 26px;
+  text-align: center;
+}
+.env-body {
+  width: min(360px, 84vw);
+  aspect-ratio: 360 / 240;
+  background: linear-gradient(165deg, #f7e8d6, #ecd4ba);
+  border-radius: 14px;
+  box-shadow: 0 24px 50px rgba(64, 48, 42, .22), inset 0 0 0 2px rgba(255, 250, 242, .7);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.env-body::before {
+  content: "Correspondencia del corazón";
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  color: rgba(64, 48, 42, .5);
+  font-size: 1.02rem;
+  transform: rotate(-2deg);
+}
+.env-flap {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 46%;
+  background: linear-gradient(180deg, #ecccab, #f0dab8);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  box-shadow: 0 2px 6px rgba(64, 48, 42, .18);
+  transform-origin: top;
+  transition: transform .8s cubic-bezier(.2,.8,.25,1);
+}
+.envelope.open .env-flap { transform: rotateX(-140deg) scaleY(.55); opacity: .25; }
+.env-topdot {
+  position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+  width: 30px; height: 30px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #e0527f, #743142);
+  box-shadow: inset 0 -4px 8px rgba(0,0,0,.2), 0 6px 14px rgba(116, 49, 66, .4);
+  display: grid; place-items: center;
+}
+.env-topdot svg { width: 16px; height: 16px; fill: rgba(255, 250, 242, .9); }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 940px;
+  margin: 0 auto;
+}
+.card {
+  perspective: 1100px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  outline: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.2,.8,.25,1);
+}
+.card.ready { opacity: 1; transform: none; }
+.card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .75s cubic-bezier(.3,.7,.3,1);
+  border-radius: 18px;
+  height: 300px;
+}
+.card.flipped .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.card-front {
+  background: linear-gradient(160deg, #fffaf2, #f6e7d2);
+  border: 1px solid rgba(184, 133, 75, .35);
+  box-shadow: 0 16px 34px rgba(64, 48, 42, .16);
+}
+.card-front .stamp {
+  position: absolute; right: 16px; top: 14px;
+  width: 40px; height: 46px ;
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(224, 82, 127, .95), transparent 55%),
+    repeating-linear-gradient(45deg, rgba(184,133,75,.5) 0 3px, transparent 3px 7px);
+  border: 2px dashed rgba(184, 133, 75, .6);
+}
+.card-front .lines { margin-top: 18px; }
+.card-front .heart-big {
+  font: inherit;
+  display: grid; place-items: center;
+  height: 100%;
+}
+.split { color: rgba(64,48,42,.5); }
+.card-front .big {
+  font-family: "Fraunces", serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--wine);
+}
+.card-front .small { color: var(--ink-soft); font-size: .82rem; font-weight: 300; margin-top: 6px; }
+.card-front .linefill { background: rgba(64, 48, 42, .12); height: 7px; border-radius: 4px; margin-top: 10px; width: 64%; }
+.card-back {
+  transform: rotateY(180deg);
+  background: var(--paper);
+  border: 1px solid rgba(184, 133, 75, .3);
+  box-shadow: 0 16px 34px rgba(64, 48, 42, .2);
+  overflow: hidden;
+}
+.card-back .photo {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 3px rgba(255, 250, 242, .9);
+}
+.card-back .quote { margin-top: 12px; font-size: .87rem; color: var(--ink-soft); font-weight: 300; line-height: 1.4; }
+.card-back .who { font-family: "Caveat", cursive; color: var(--wine); font-size: 1.05rem; }
+.cave { font-family: "Caveat", cursive; }
+
+.foot {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; text-align: center;
+  padding: 14px 16px 18px; font-size: .84rem; color: rgba(64, 48, 42, .6);
+  background: linear-gradient(180deg, transparent, rgba(243, 230, 217, .95));
+  pointer-events: none;
+}
+.foot strong { color: var(--wine); }
+
+@media (max-width: 700px) { .card { height: 280px; } .card-inner { height: 280px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+  <div id="intro" class="intro">
+    <div>
+      <p class="intro-kicker">Correspondencia del corazón</p>
+      <h1>Ana <em>&</em> Luis</h1>
+      <p>Un sobre que guarda todas las cartas que nos prometimos. Voltea cada una y verás la foto y la promesa dentro.</p>
+      <button id="open-mail" class="open-btn" type="button">Abrir el sobre</button>
+    </div>
+  </div>
+
+  <main class="scene">
+    <header class="scene-head">
+      <p class="kicker">Cartas del corazón</p>
+      <h2>Cada carta, <em>una promesa</em>.</h2>
+    </header>
+    <p class="hint">Toca las cartas para voltearlas.</p>
+
+    <div class="envelope" id="envelope">
+      <div class="env-flap"></div>
+      <div class="env-topdot" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.5-7.5-9.6A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 3.4C19.5 16.5 12 21 12 21Z"/></svg>
+      </div>
+      <div class="env-body"></div>
+    </div>
+
+    <div class="cards" id="cards"></div>
+  </main>
+
+  <footer class="foot">
+    Sellado con cariño por <strong>Creaciones Milo</strong> &middot; Bolivia
+  </footer>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — para entregas:
+     photo: URL de la foto (o vacío = placeholder)
+     quote: la promesa / mensaje dentro de la carta
+     sign:  quién firma
+   ===================================================================== */
+const LETTERS = [
+  { quote: 'Prometo que siempre habrá café caliente… aunque la casa esté temblando. De: Luis', photo: '', grad: 1, initials: 'A', front: 'Promesa n.º 1' },
+  { quote: 'Y si un día me pierdo, regreso. Siempre regreso con flores en las manos. De: Ana', photo: '', grad: 2, initials: 'A&L', front: 'Promesa n.º 2' },
+  { quote: 'Acepto tus domingos de siesta y tus canciones desafinadas. De: Luis', photo: '', grad: 3, initials: 'L', front: 'Promesa n.º 3' },
+  { quote: 'Cualquier rincón del mundo es nuestro si estamos los dos. De: Ana', photo: '', grad: 4, initials: 'A', front: 'Promesa n.º 4' },
+  { quote: 'Que dentro de años, volviendo a abrir esta carta, siga estando a la altura. De: Luis', photo: '', grad: 5, initials: 'A&L', front: 'Promesa n.º 5' },
+  { quote: 'Un trato eterno: nunca guardar rencor más allá de una sonrisa. De: Ana', photo: '', grad: 1, initials: 'A', front: 'Promesa n.º 6' }
+];
+
+const GRADS = [
+  ['#e0527f', '#a6486a'],
+  ['#c78b5e', '#743142'],
+  ['#2f9e83', '#58c2a5'],
+  ['#6a7fdb', '#8d9ce8'],
+  ['#bd9152', '#e0b884'],
+  ['#743142', '#5b2534']
+];
+
+function photoURL(p) {
+  if (p.photo) return p.photo;
+  const [c1, c2] = GRADS[(p.grad || 1) % GRADS.length];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="420" height="260" viewBox="0 0 420 260">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/>
+    </linearGradient></defs>
+    <rect width="420" height="260" fill="url(#g)"/>
+    <g fill="rgba(255,255,255,.18)"><circle cx="50" cy="44" r="6"/><circle cx="370" cy="52" r="4"/><circle cx="350" cy="212" r="7"/></g>
+    <text x="210" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="58" font-style="italic" fill="rgba(255,255,255,.9)">${(p.initials || '♥').replace(/&/g, '&amp;')}</text>
+  </svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
+
+const cardsBox = document.getElementById('cards');
+LETTERS.forEach(function (l, i) {
+  const el = document.createElement('button');
+  el.type = 'button';
+  el.className = 'card';
+  el.setAttribute('aria-label', l.front || 'Carta');
+  el.innerHTML = `
+    <div class="card-inner">
+      <div class="card-front">
+        <span class="stamp" aria-hidden="true"></span>
+        <div class="lines">
+          <p class="small">Correo del corazón</p>
+          <h3 class="big">${l.front || 'Carta'}</h3>
+          <div class="linefill"></div>
+        </div>
+        <div class="heart-big">
+          <svg viewBox="0 0 24 24" width="44" height="44" fill="rgba(224,82,127,.35)"><path d="M12 21s-7.5-4.5-7.5-9.6A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 3.4C19.5 16.5 12 21 12 21Z"/></svg>
+        </div>
+        <p class="small">Tócame para revelar</p>
+      </div>
+      <div class="card-back">
+        <div class="photo" style="background-image:url('${photoURL(l)}')" aria-hidden="true"></div>
+        <p class="quote">${l.quote}</p>
+      </div>
+    </div>`;
+  el.addEventListener('click', function () { el.classList.toggle('flipped'); });
+  cardsBox.appendChild(el);
+});
+
+/* ---------- Intro + sobre ---------- */
+document.getElementById('open-mail').addEventListener('click', function () {
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('envelope').classList.add('open');
+  document.querySelectorAll('.card').forEach(function (c, i) {
+    setTimeout(function () { c.classList.add('ready'); }, 500 + i * 130);
+  });
+});
+</script>
+</body>
+</html>
