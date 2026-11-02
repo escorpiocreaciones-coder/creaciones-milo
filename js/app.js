@@ -2,6 +2,12 @@
   'use strict';
 
   var config = window.STORE_CONFIG || {};
+  function optimizeImage(url) {
+    var cn = (config.cloudinary && config.cloudinary.cloudName) ? String(config.cloudinary.cloudName).trim() : '';
+    if (!cn || !url) return url;
+    if (String(url).indexOf('res.cloudinary.com') >= 0) return url;
+    return 'https://res.cloudinary.com/' + cn + '/image/fetch/f_auto,q_auto/' + url;
+  }
   var seedProducts = window.PRODUCTS || [];
   var products = seedProducts.slice();
   var categories = window.STORE_CATEGORIES || [{ id: 'todos', label: 'Todos' }];
@@ -247,7 +253,7 @@
   function productMedia(product, portrait) {
     if (product.photo) {
       return '<img class="product-photo' + (portrait ? ' product-photo-tall' : '') + '" src="' +
-        escapeHTML(product.photo) + '" alt="" loading="lazy" decoding="async">';
+        escapeHTML(optimizeImage(product.photo)) + '" alt="" loading="lazy" decoding="async">';
     }
     return productArt(product, portrait);
   }

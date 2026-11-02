@@ -13,6 +13,8 @@ window.STORE_CONFIG = {
   paymentNote: 'Aceptamos transferencia bancaria y pago con QR.',
   orderIntro: 'Hola, quiero hacer un pedido personalizado.',
   bookDemo: 'libro-demo.html',
+  analytics: { ga: 'G-XXXXXXXXXX' },
+  cloudinary: { cloudName: '', uploadPreset: '' },
   supabase: {
     url: 'https://acqmikwiioasiljkjqln.supabase.co',
     key: 'sb_publishable_QTTKuqGRvUQaPPAqesHWrA_hnyWrfUY',
