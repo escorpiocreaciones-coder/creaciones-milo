@@ -2072,3 +2072,33 @@ details[open] summary { color: var(--rose, #e0527f); }
 @media (prefers-reduced-motion: reduce) {
   .product-card, .chip, .btn { transition: none !important; }
 }
+
+/* Efecto liquid button */
+.btn, .chip, .card-button {
+  position: relative;
+  overflow: hidden;
+}
+.btn::before, .chip::before, .card-button::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle at 30% 30%, rgba(224,82,127,.45), rgba(116,49,66,.25) 45%, transparent 70%);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .55s ease, opacity .4s ease, border-radius .8s ease;
+  z-index: 0;
+  pointer-events: none;
+}
+.btn:hover::before, .chip:hover::before, .card-button:hover::before {
+  transform: scale(2.4);
+  opacity: 1;
+  animation: liquidMorph 2.6s ease-in-out infinite;
+}
+@keyframes liquidMorph {
+  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  33% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  66% { border-radius: 30% 70% 40% 60% / 50% 60% 40% 50%; }
+  100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+}
+.btn > *, .chip > *, .card-button > * { position: relative; z-index: 1; }
