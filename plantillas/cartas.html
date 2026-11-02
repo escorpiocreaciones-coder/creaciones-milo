@@ -241,6 +241,7 @@ h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
      quote: la promesa / mensaje dentro de la carta
      sign:  quién firma
    ===================================================================== */
+/*[CFG]*/
 const LETTERS = [
   { quote: 'Prometo que siempre habrá café caliente… aunque la casa esté temblando. De: Luis', photo: '', grad: 1, initials: 'A', front: 'Promesa n.º 1' },
   { quote: 'Y si un día me pierdo, regreso. Siempre regreso con flores en las manos. De: Ana', photo: '', grad: 2, initials: 'A&L', front: 'Promesa n.º 2' },
@@ -249,6 +250,8 @@ const LETTERS = [
   { quote: 'Que dentro de años, volviendo a abrir esta carta, siga estando a la altura. De: Luis', photo: '', grad: 5, initials: 'A&L', front: 'Promesa n.º 5' },
   { quote: 'Un trato eterno: nunca guardar rencor más allá de una sonrisa. De: Ana', photo: '', grad: 1, initials: 'A', front: 'Promesa n.º 6' }
 ];
+const MUSIC = { src: '', title: '' };
+/*[/CFG]*/
 
 const GRADS = [
   ['#e0527f', '#a6486a'],
@@ -311,5 +314,24 @@ document.getElementById('open-mail').addEventListener('click', function () {
   });
 });
 </script>
+
+<script>/*[PLAYER]*/
+(function(){
+  var M = (typeof MUSIC === 'undefined') ? null : MUSIC || {};
+  if (!M || !M.src) return;
+  var st = document.createElement('style'); st.textContent = '.music-btn{position:fixed;right:22px;bottom:22px;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;z-index:95;background:linear-gradient(135deg,#743142,#e0527f);box-shadow:0 12px 26px rgba(116,49,66,.45);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;transition:transform .2s,filter .2s}.music-btn:hover{transform:translateY(-2px)}@keyframes mbar{0%,100%{height:5px}50%{height:15px}}.music-btn i{display:block;width:3px;border-radius:2px;background:rgba(255,250,242,.95);height:5px;margin:0 1.5px}.music-btn.playing i{animation:mbar 1s ease-in-out infinite}.music-btn.playing i:nth-child(2){animation-delay:.15s}.music-btn.playing i:nth-child(3){animation-delay:.3s}.music-btn.playing i:nth-child(4){animation-delay:.45s}';
+  document.head.appendChild(st);
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'music-btn'; b.title = M.title || 'Canción';
+  b.setAttribute('aria-label', 'Poner o quitar la música');
+  b.innerHTML = '<i></i><i></i><i></i><i></i>';
+  var a = new Audio(M.src); a.loop = true; a.preload = 'none';
+  b.addEventListener('click', function(){
+    if (a.paused) { a.play().then(function(){ b.classList.add('playing'); }).catch(function(){ b.style.display = 'none'; }); }
+    else { a.pause(); b.classList.remove('playing'); }
+  });
+  document.body.appendChild(b);
+})();
+/*[/PLAYER]*/</script>
 </body>
 </html>

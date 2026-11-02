@@ -201,6 +201,7 @@ h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
      note:  el texto manuscrito (como al dorso de la polaroid)
      msg:   el texto largo que aparece al acercarla
    ===================================================================== */
+/*[CFG]*/
 const DESK = [
   { photo: '', initials: 'A', grad: 1, note: 'El primer café', msg: 'Del 14 de febrero de 2021: dos tazas y una conversación sin final.' },
   { photo: '', initials: 'A&L', grad: 2, note: 'Nuestro paseo', msg: 'La plaza, un helado de dos sabores y una decisión: seguir caminando.' },
@@ -211,6 +212,8 @@ const DESK = [
   { photo: '', initials: 'A', grad: 7, note: 'Mañana con patas', msg: 'Nike entró a nuestra vida y se ganó el sofá.' },
   { photo: '', initials: 'A&L', grad: 8, note: 'Ayer, hoy y mañana', msg: 'Todavía nos faltan muchísimas fotografías por revelar.' }
 ];
+const MUSIC = { src: '', title: '' };
+/*[/CFG]*/
 
 const GRADS = [
   ['#e0527f', '#a6486a'],
@@ -280,5 +283,24 @@ document.getElementById('open-desk').addEventListener('click', function () {
   document.getElementById('intro').classList.add('hidden');
 });
 </script>
+
+<script>/*[PLAYER]*/
+(function(){
+  var M = (typeof MUSIC === 'undefined') ? null : MUSIC || {};
+  if (!M || !M.src) return;
+  var st = document.createElement('style'); st.textContent = '.music-btn{position:fixed;right:22px;bottom:22px;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;z-index:95;background:linear-gradient(135deg,#743142,#e0527f);box-shadow:0 12px 26px rgba(116,49,66,.45);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;transition:transform .2s,filter .2s}.music-btn:hover{transform:translateY(-2px)}@keyframes mbar{0%,100%{height:5px}50%{height:15px}}.music-btn i{display:block;width:3px;border-radius:2px;background:rgba(255,250,242,.95);height:5px;margin:0 1.5px}.music-btn.playing i{animation:mbar 1s ease-in-out infinite}.music-btn.playing i:nth-child(2){animation-delay:.15s}.music-btn.playing i:nth-child(3){animation-delay:.3s}.music-btn.playing i:nth-child(4){animation-delay:.45s}';
+  document.head.appendChild(st);
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'music-btn'; b.title = M.title || 'Canción';
+  b.setAttribute('aria-label', 'Poner o quitar la música');
+  b.innerHTML = '<i></i><i></i><i></i><i></i>';
+  var a = new Audio(M.src); a.loop = true; a.preload = 'none';
+  b.addEventListener('click', function(){
+    if (a.paused) { a.play().then(function(){ b.classList.add('playing'); }).catch(function(){ b.style.display = 'none'; }); }
+    else { a.pause(); b.classList.remove('playing'); }
+  });
+  document.body.appendChild(b);
+})();
+/*[/PLAYER]*/</script>
 </body>
 </html>

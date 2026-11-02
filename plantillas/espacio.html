@@ -202,6 +202,7 @@ h1, h2, .serif { font-family: "Fraunces", Georgia, serif; }
    En 'photo' pon la URL real de cada foto (o déjalo vacío para
    usar el placeholder de colores con sus iniciales).
    ===================================================================== */
+/*[CFG]*/
 const GALAXY = {
   photos: [
     { photo: '', initials: 'A', grad: 1, tag: '1ª órbita', title: 'Donde todo empezó', date: '14 feb 2021', msg: 'Dos tazas calientes y el resto de nuestras vidas.' },
@@ -212,6 +213,8 @@ const GALAXY = {
     { photo: '', initials: 'L', grad: 6, tag: 'eclipse', title: 'Hoy', date: 'hoy', msg: 'Y seguimos girando juntos… sin brújula y sin prisa.' }
   ]
 };
+const MUSIC = { src: '', title: '' };
+/*[/CFG]*/
 
 const GRADS = [
   ['#e0527f', '#a6486a'],
@@ -349,5 +352,24 @@ setInterval(function () {
   setTimeout(function () { s.remove(); }, 2700);
 }, 4200);
 </script>
+
+<script>/*[PLAYER]*/
+(function(){
+  var M = (typeof MUSIC === 'undefined') ? null : MUSIC || {};
+  if (!M || !M.src) return;
+  var st = document.createElement('style'); st.textContent = '.music-btn{position:fixed;right:22px;bottom:22px;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;z-index:95;background:linear-gradient(135deg,#743142,#e0527f);box-shadow:0 12px 26px rgba(116,49,66,.45);display:flex;align-items:flex-end;justify-content:center;padding-bottom:14px;transition:transform .2s,filter .2s}.music-btn:hover{transform:translateY(-2px)}@keyframes mbar{0%,100%{height:5px}50%{height:15px}}.music-btn i{display:block;width:3px;border-radius:2px;background:rgba(255,250,242,.95);height:5px;margin:0 1.5px}.music-btn.playing i{animation:mbar 1s ease-in-out infinite}.music-btn.playing i:nth-child(2){animation-delay:.15s}.music-btn.playing i:nth-child(3){animation-delay:.3s}.music-btn.playing i:nth-child(4){animation-delay:.45s}';
+  document.head.appendChild(st);
+  var b = document.createElement('button');
+  b.type = 'button'; b.className = 'music-btn'; b.title = M.title || 'Canción';
+  b.setAttribute('aria-label', 'Poner o quitar la música');
+  b.innerHTML = '<i></i><i></i><i></i><i></i>';
+  var a = new Audio(M.src); a.loop = true; a.preload = 'none';
+  b.addEventListener('click', function(){
+    if (a.paused) { a.play().then(function(){ b.classList.add('playing'); }).catch(function(){ b.style.display = 'none'; }); }
+    else { a.pause(); b.classList.remove('playing'); }
+  });
+  document.body.appendChild(b);
+})();
+/*[/PLAYER]*/</script>
 </body>
 </html>
