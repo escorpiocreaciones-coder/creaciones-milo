@@ -854,6 +854,12 @@
       registerReveal(node, Math.min(index * 70, 280));
     });
     renderGrid();
+    setTimeout(function () {
+      document.querySelectorAll('.reveal').forEach(function (node) {
+        var r = node.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) node.classList.add('is-in');
+      });
+    }, 120);
     bindCatalog();
     bindDialog();
     bindDocument();
