@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg: #fdf9f4;
   --surface: #ffffff;
   --surface-soft: #f6ede5;
@@ -1687,7 +1687,7 @@ p:last-child { margin-bottom: 0; }
 }
 
 /* =====================================================================
-   REFRESCO VISUAL v2 — tipografía nueva, más color, motion y efectos
+   REFRESCO VISUAL v2 â€” tipografÃ­a nueva, mÃ¡s color, motion y efectos
    ===================================================================== */
 
 :root {
@@ -1816,7 +1816,7 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 
 .btn-ghost:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
 
-/* ---------- Navegación ---------- */
+/* ---------- NavegaciÃ³n ---------- */
 #site-nav a:not(.nav-cta) {
   position: relative;
 }
@@ -1840,7 +1840,7 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 
 .nav-cta { background: var(--grad-brand); color: #fff; }
 
-/* ---------- Chips por categoría ---------- */
+/* ---------- Chips por categorÃ­a ---------- */
 .chip { transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
 
 .chip:hover { transform: translateY(-2px); }
@@ -2021,7 +2021,7 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 .book-promo-visual:hover .book-mock-page--left { transform: perspective(900px) rotateY(10deg) translateY(-6px); }
 .book-promo-visual:hover .book-mock-page--right { transform: perspective(900px) rotateY(-10deg) translateY(-6px); }
 
-/* ---------- Ajuste móvil: buscador (la toolbar pasa a columna y el flex-basis estiraba el buscador) ---------- */
+/* ---------- Ajuste mÃ³vil: buscador (la toolbar pasa a columna y el flex-basis estiraba el buscador) ---------- */
 @media (max-width: 700px) {
   .search-wrap { flex: none; }
   .search-wrap svg { width: 18px; height: 18px; }
@@ -2046,13 +2046,13 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 .book-templates-note a:hover { text-decoration-color: var(--rose); }
 
 
-/* Transiciones dinámicas de catálogo */
+/* Transiciones dinÃ¡micas de catÃ¡logo */
 .product-grid { transition: opacity .22s ease, transform .22s ease; }
 .product-grid.is-switching { opacity: 0; transform: translateY(8px); }
 .chip { transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease; }
 .chip.is-active { transform: scale(1.05); }
 
-/* Transiciones dinámicas globales */
+/* Transiciones dinÃ¡micas globales */
 .btn, .card-button, .text-button, .chip, .option-pill, .product-card, .empty-state button {
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, filter .18s ease, opacity .18s ease;
 }
@@ -2063,7 +2063,7 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 details summary { transition: color .18s ease; }
 details[open] summary { color: var(--rose, #e0527f); }
 
-/* Mejoras de apariencia y rendimiento (hero/catálogo) */
+/* Mejoras de apariencia y rendimiento (hero/catÃ¡logo) */
 .hero-copy h1 { letter-spacing: -0.03em; }
 .hero-visual { filter: drop-shadow(0 30px 60px rgba(116,49,66,.22)); }
 .product-card { will-change: transform; }
@@ -2130,70 +2130,8 @@ details[open] summary { color: var(--rose, #e0527f); }
   #particle-canvas { display: none; }
 }
 
-/* Asegura que las secciones queden por encima de las partículas */
+/* Asegura que las secciones queden por encima de las partÃ­culas */
 section, header, footer, .hero, .catalog, .book-promo { position: relative; z-index: 1; }
 #particle-canvas { z-index: 0; opacity: .5; }
 
 
-/* Modo oscuro */
-html.dark {
-  --bg: #1a1218;
-  --surface: #241a22;
-  --surface-soft: #2d222c;
-  --surface-soft-2: #3a2d38;
-  --ink: #f0e6dc;
-  --ink-soft: #c9b8b0;
-  --ink-faint: #a89a94;
-  --line: #3a2d38;
-  --line-soft: #2d222c;
-  --primary: #e0527f;
-  --primary-soft: #f472b6;
-  --primary-deep: #94496d;
-  --accent: #e7c79a;
-  --accent-soft: #c7a05b;
-  --shadow-sm: 0 6px 18px rgba(0,0,0,0.35);
-  --shadow-md: 0 14px 38px rgba(0,0,0,0.45);
-  --shadow-lg: 0 28px 70px rgba(0,0,0,0.55);
-}
-html.dark body { background: var(--bg); color: var(--ink); }
-.theme-toggle {
-  background: var(--surface-soft);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  width: 40px; height: 40px;
-  display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 1.1rem; transition: transform .2s ease, background .2s ease;
-}
-.theme-toggle:hover { transform: scale(1.08); }
-
-
-/* Modo oscuro */
-html.dark {
-  --bg: #1a1218;
-  --surface: #241a22;
-  --surface-soft: #2d222c;
-  --surface-soft-2: #3a2d38;
-  --ink: #f0e6dc;
-  --ink-soft: #c9b8b0;
-  --ink-faint: #a89a94;
-  --line: #3a2d38;
-  --line-soft: #2d222c;
-  --primary: #e0527f;
-  --primary-soft: #f472b6;
-  --primary-deep: #94496d;
-  --accent: #e7c79a;
-  --accent-soft: #c7a05b;
-  --shadow-sm: 0 6px 18px rgba(0,0,0,0.35);
-  --shadow-md: 0 14px 38px rgba(0,0,0,0.45);
-  --shadow-lg: 0 28px 70px rgba(0,0,0,0.55);
-}
-html.dark body { background: var(--bg); color: var(--ink); }
-.theme-toggle {
-  background: var(--surface-soft);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  width: 40px; height: 40px;
-  display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 1.1rem; transition: transform .2s ease, background .2s ease;
-}
-.theme-toggle:hover { transform: scale(1.08); }
