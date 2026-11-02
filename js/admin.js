@@ -601,7 +601,7 @@
 
   function onEditorInput(event) {
     const el = event.target;
-    if (!el.matches || !el.matches('input[data-f], textarea[data-f], input[data-p], input[data-of], input[data-cf], input[data-ff]')) return;
+    if (!el.matches || !el.matches('input[data-f], textarea[data-f], select[data-f], input[data-p], input[data-of], input[data-cf], input[data-ff]')) return;
 
     if (el.dataset.f) {
       const key = el.dataset.f;
