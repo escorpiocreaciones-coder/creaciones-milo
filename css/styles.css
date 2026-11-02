@@ -2051,3 +2051,14 @@ h1, h2, h3, h4 { letter-spacing: -0.015em; }
 .product-grid.is-switching { opacity: 0; transform: translateY(8px); }
 .chip { transition: transform .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease; }
 .chip.is-active { transform: scale(1.05); }
+
+/* Transiciones dinámicas globales */
+.btn, .card-button, .text-button, .chip, .option-pill, .product-card, .empty-state button {
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease, filter .18s ease, opacity .18s ease;
+}
+.btn:active, .card-button:active, .text-button:active, .chip:active { transform: scale(.97); }
+.product-card { transition: transform .28s ease, box-shadow .28s ease, opacity .28s ease; }
+.product-card:hover { transform: translateY(-6px); }
+.section-head, .hero-copy, .book-promo-copy { transition: opacity .4s ease, transform .4s ease; }
+details summary { transition: color .18s ease; }
+details[open] summary { color: var(--rose, #e0527f); }
