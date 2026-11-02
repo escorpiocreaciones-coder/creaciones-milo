@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de administración · Creaciones Milo</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <main class="admin-main">
+
+    <!-- ================= PANEL ================= -->
+    <section id="panel-shell" hidden>
+      <header class="admin-topbar">
+        <div class="admin-topbar-brand">
+          <span class="admin-logo" aria-hidden="true">
+            <svg viewBox="0 0 40 40" focusable="false"><path d="M20 35s-11-6.6-11-13.8C9 16.5 12.5 13 16.5 13c1.5 0 2.7.5 3.5 1.3.8-.8 2-1.3 3.5-1.3C27.5 13 31 16.5 31 21.2 31 28.4 20 35 20 35Z" fill="currentColor"/></svg>
+          </span>
+          <div>
+            <p class="admin-brand-name">Panel de la tienda</p>
+            <p class="admin-brand-note" id="admin-email"></p>
+          </div>
+        </div>
+        <div class="admin-topbar-actions">
+          <a class="btn btn-ghost btn-sm" href="index.html" target="_blank" rel="noopener">Ver tienda</a>
+          <button class="btn btn-ghost btn-sm" id="btn-refresh" type="button">Actualizar</button>
+          <button class="btn btn-ghost btn-sm" id="btn-logout" type="button">Salir</button>
+        </div>
+      </header>
+
+      <div class="admin-toolbar">
+        <div class="admin-search">
+          <input type="search" id="admin-search" placeholder="Buscar producto por nombre…" autocomplete="off">
+        </div>
+        <button class="btn btn-primary" id="btn-new-product" type="button">+ Nuevo producto</button>
+        <button class="btn btn-secondary" id="btn-import-demo" type="button">Importar 10 de ejemplo</button>
+      </div>
+
+      <p class="admin-summary" id="admin-summary"></p>
+      <p class="admin-banner is-error" id="admin-banner" hidden></p>
+
+      <section id="admin-list" class="admin-list" aria-live="polite"></section>
+      <p class="admin-empty" id="admin-empty" hidden>No hay productos todavía. Usa “+ Nuevo producto” o importa los ejemplos.</p>
+      <p class="admin-loading" id="admin-loading">Cargando productos…</p>
+    </section>
+
+    <!-- ================= LOGIN ================= -->
+    <section id="login-shell" class="login-shell">
+      <div class="login-card">
+        <div class="login-brand">
+          <span class="admin-logo admin-logo-lg" aria-hidden="true">
+            <svg viewBox="0 0 40 40" focusable="false"><path d="M20 35s-11-6.6-11-13.8C9 16.5 12.5 13 16.5 13c1.5 0 2.7.5 3.5 1.3.8-.8 2-1.3 3.5-1.3C27.5 13 31 16.5 31 21.2 31 28.4 20 35 20 35Z" fill="currentColor"/></svg>
+          </span>
+          <h1>Panel de la tienda</h1>
+          <p class="login-sub">Administrá productos y fotos de <strong>Creaciones Milo</strong>.</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <label class="login-field">
+            <span>Correo</span>
+            <input type="email" id="login-email" autocomplete="username" placeholder="tucorreo@ejemplo.com" required>
+          </label>
+          <label class="login-field">
+            <span>Contraseña</span>
+            <input type="password" id="login-password" autocomplete="current-password" placeholder="••••••••" required>
+          </label>
+          <p class="login-error" id="login-error" hidden></p>
+          <p class="login-ok" id="login-ok" hidden></p>
+          <div class="login-actions">
+            <button class="btn btn-primary" id="btn-login" type="submit">Ingresar</button>
+            <button class="btn btn-secondary" id="btn-signup" type="button">Crear cuenta con este correo</button>
+          </div>
+        </form>
+
+        <p class="login-help">
+          Si es tu primera vez: escribe tu correo y usa <strong>“Crear cuenta”</strong>.
+          Tu correo debe estar autorizado en <span class="code">tienda_admin</span> (ver
+          <span class="code">supabase-setup.sql</span>). Después del alta, revisa tu correo si Supabase
+          te pide confirmarlo y vuelve a este panel.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= EDITOR DE PRODUCTO ================= -->
+  <dialog id="editor-dialog" class="editor-dialog">
+    <div class="editor-shell" id="editor-shell">
+      <header class="editor-head">
+        <div>
+          <p class="editor-kicker" id="editor-kicker">Producto nuevo</p>
+          <h2 class="editor-title" id="editor-title">Nuevo producto</h2>
+        </div>
+        <button class="editor-close" id="editor-close" type="button" aria-label="Cerrar">&times;</button>
+      </header>
+
+      <div class="editor-body" id="editor-body">
+        <!-- Lo llena js/admin.js -->
+      </div>
+
+      <footer class="editor-foot">
+        <p class="editor-error" id="editor-error" hidden></p>
+        <div class="editor-foot-actions">
+          <button class="btn btn-ghost" id="editor-cancel" type="button">Cancelar</button>
+          <button class="btn btn-primary" id="editor-save" type="button">Guardar producto</button>
+        </div>
+      </footer>
+    </div>
+  </dialog>
+
+  <p class="admin-toast" id="admin-toast" role="status" aria-live="polite"></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

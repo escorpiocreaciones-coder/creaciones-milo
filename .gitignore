@@ -1,0 +1,3 @@
+# Setup privado, no va al sitio público
+supabase-setup.sql
+*.log

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuestra historia · Libro digital demo</title>
+  <meta name="description" content="Demo de un libro digital de fotos personalizado para parejas: páginas con fotos, mensajes y una canción especial.">
+  <meta name="theme-color" content="#5b2534">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/libro.css">
+</head>
+<body>
+  <header class="book-top">
+    <a class="book-back" href="index.html">&#8592; Volver a la tienda</a>
+    <span class="book-tag">Demo · Libro digital</span>
+  </header>
+
+  <main>
+    <section class="book-cover" id="book-cover">
+      <div class="cover-art">
+        <div class="cover-main" id="cover-main" aria-hidden="true"></div>
+        <div class="cover-minis">
+          <div class="cover-mini" id="cover-mini-1" aria-hidden="true"></div>
+          <div class="cover-mini" id="cover-mini-2" aria-hidden="true"></div>
+        </div>
+      </div>
+      <p class="cover-kicker">Un regalo que se siente</p>
+      <h1 class="cover-title">Nuestra historia</h1>
+      <p class="cover-couple">Ana &amp; Luis</p>
+      <p class="cover-date">14 · 02 · 2024</p>
+      <button class="cover-btn" id="open-book" type="button">Abrir nuestro libro</button>
+      <p class="cover-note">Demo con fotos de ejemplo. Cada libro se personaliza con sus fotos, sus mensajes y su canción.</p>
+      <div class="cover-hearts" aria-hidden="true"><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="book-reader" id="book-reader" hidden>
+      <div class="book-stage-reader">
+        <span class="book-mini-brand">Libro digital · demo</span>
+        <a class="book-back" href="#" id="close-reader">Cerrar</a>
+      </div>
+      <article class="book-page" id="book-page" aria-live="polite"></article>
+      <div class="reader-nav">
+        <button class="reader-btn" id="book-prev" type="button" aria-label="Página anterior">&#8249;</button>
+        <div class="reader-dots" id="book-dots" role="group" aria-label="Páginas"></div>
+        <button class="reader-btn" id="book-next" type="button" aria-label="Página siguiente">&#8250;</button>
+      </div>
+      <p class="reader-counter" id="book-counter"></p>
+    </section>
+  </main>
+</body>
+<script src="js/libro.js"></script>
+</html>

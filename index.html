@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Creaciones Milo | Regalos personalizados para parejas</title>
+  <meta name="description" content="Cajitas, carteles, peluches y libros digitales personalizados para parejas. Diseños hechos a mano en Bolivia y pedidos por WhatsApp.">
+  <meta name="theme-color" content="#743142">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Creaciones Milo | Regalos personalizados">
+  <meta property="og:description" content="Cajitas, carteles, peluches y libros digitales para regalar historias.">
+  <meta property="og:locale" content="es_CR">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#catalogo">Ir al catálogo</a>
+
+  <header class="site-header" id="inicio">
+    <div class="container header-inner">
+      <a class="brand" href="#inicio" aria-label="Creaciones Milo, ir al inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 27s-9.5-5.7-9.5-12.2A5.3 5.3 0 0 1 16 10.1a5.3 5.3 0 0 1 9.5 4.7C25.5 21.3 16 27 16 27Z" fill="currentColor"/>
+            <path d="M9 6.5c2.8 0 5.2 1.4 7 4.1 1.8-2.7 4.2-4.1 7-4.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>Milo</strong>
+          <small>Creaciones</small>
+        </span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span>
+        <span class="sr-only">Abrir menú</span>
+      </button>
+
+      <nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+        <a href="#catalogo">Catálogo</a>
+        <a href="#libro-digital">Libro digital</a>
+        <a href="#como-comprar">Cómo comprar</a>
+        <a href="#preguntas">Preguntas</a>
+        <a class="nav-cta" href="#contacto">Hablemos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-halo" aria-hidden="true"></div>
+      <div class="hero-hearts" aria-hidden="true">
+        <svg class="hero-heart hero-heart--one" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.5-7.5-9.6A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 3.4C19.5 16.5 12 21 12 21Z" fill="currentColor"/></svg>
+        <svg class="hero-heart hero-heart--two" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.5-7.5-9.6A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 3.4C19.5 16.5 12 21 12 21Z" fill="currentColor"/></svg>
+        <svg class="hero-heart hero-heart--three" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.5-7.5-9.6A4.2 4.2 0 0 1 12 8a4.2 4.2 0 0 1 7.5 3.4C19.5 16.5 12 21 12 21Z" fill="currentColor"/></svg>
+      </div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Regalos personalizados · Bolivia</p>
+          <h1>Detalles que <em>cuentan su historia</em>.</h1>
+          <p class="hero-text">Cajitas, carteles, peluches y libros digitales hechos para esa persona que lo merece todo. Tú eliges el detalle; nosotros lo hacemos inolvidable.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#catalogo">Ver catálogo</a>
+            <a class="btn btn-ghost" href="libro-demo.html">Abrir libro de ejemplo</a>
+          </div>
+          <ul class="hero-points" aria-label="Beneficios">
+            <li>Hecho a mano</li>
+            <li>Personalización real</li>
+            <li>Entrega en Bolivia</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual" aria-label="Muestra de productos personalizados">
+          <div class="hero-card hero-card--main" id="hero-art-main"></div>
+          <div class="hero-card hero-card--book" id="hero-art-book"></div>
+          <div class="hero-card hero-card--bear" id="hero-art-bear"></div>
+          <div class="hero-sticker" aria-hidden="true">Hecho con<br><strong>amor</strong></div>
+          <div class="hero-spark hero-spark--one" aria-hidden="true"></div>
+          <div class="hero-spark hero-spark--two" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="values" aria-label="Por qué elegirnos">
+      <div class="container values-grid">
+        <article class="value-card" data-reveal>
+          <span class="value-number">01</span>
+          <h2>Diseño con intención</h2>
+          <p>No vendemos un producto genérico: armamos cada detalle alrededor de su historia.</p>
+        </article>
+        <article class="value-card" data-reveal>
+          <span class="value-number">02</span>
+          <h2>Fotos y mensajes reales</h2>
+          <p>Tú eliges las fotos y las palabras. Nosotros cuidamos cómo se ven y cómo se sienten.</p>
+        </article>
+        <article class="value-card" data-reveal>
+          <span class="value-number">03</span>
+          <h2>Compra sin complicarte</h2>
+          <p>Personaliza en la web y envía el pedido por WhatsApp. Coordinamos pago y entrega.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section catalog" id="catalogo">
+      <div class="container">
+        <div class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow">El catálogo</p>
+            <h2>Elige el detalle. Nosotros lo hacemos tuyo.</h2>
+          </div>
+          <p class="section-note">Precios de referencia en bolivianos. Cada producto se personaliza contigo antes de producirlo.</p>
+        </div>
+
+        <div class="catalog-toolbar">
+          <label class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span class="sr-only">Buscar productos</span>
+            <input id="search-input" type="search" placeholder="Buscar cajitas, carteles, peluches..." autocomplete="off">
+            <button class="search-clear" id="search-clear" type="button" aria-label="Borrar búsqueda" hidden>&times;</button>
+          </label>
+          <label class="sort-wrap">
+            <span>Ordenar</span>
+            <select id="sort-select">
+              <option value="featured">Destacados</option>
+              <option value="price-asc">Menor precio</option>
+              <option value="price-desc">Mayor precio</option>
+              <option value="name">Nombre</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="category-filters" id="category-filters" role="group" aria-label="Filtrar por categoría"></div>
+
+        <div class="catalog-meta">
+          <p id="results-count" aria-live="polite"></p>
+          <button class="text-button" id="reset-filters" type="button" hidden>Limpiar filtros</button>
+        </div>
+
+        <div class="product-grid" id="product-grid"></div>
+        <div class="empty-state" id="empty-state" hidden>
+          <span class="empty-mark" aria-hidden="true">?</span>
+          <h3>No encontramos ese detalle.</h3>
+          <p>Prueba con otra palabra o revisa todas las categorías.</p>
+          <button class="btn btn-primary" type="button" data-reset-filters>Ver todos los productos</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section book-promo" id="libro-digital">
+      <div class="container book-promo-grid">
+        <div class="book-promo-copy" data-reveal>
+          <p class="eyebrow">Nuevo formato</p>
+          <h2>Un libro digital para volver a sentir cada momento.</h2>
+          <p>Convertimos sus fotos, mensajes y canción favorita en una página privada que se abre como un libro. Sin apps, sin complicaciones: solo un enlace para guardar y compartir.</p>
+          <ul class="check-list">
+            <li>Hasta 30 fotos y textos personalizados.</li>
+            <li>Canción de fondo opcional.</li>
+            <li>Enlace privado para celular y computadora.</li>
+            <li>Entrega digital en 48 a 72 horas.</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="libro-demo.html">Ver demo del libro</a>
+            <button class="btn btn-ghost" type="button" data-open-product="libro-digital">Quiero mi libro</button>
+          </div>
+        </div>
+
+        <div class="book-promo-visual" aria-label="Vista previa de un libro digital">
+          <div class="book-mock">
+            <div class="book-mock-page book-mock-page--left">
+              <span class="book-mock-photo book-mock-photo--one"></span>
+              <p>Donde todo comenzó</p>
+            </div>
+            <div class="book-mock-page book-mock-page--right">
+              <span class="book-mock-photo book-mock-photo--two"></span>
+              <p>Nuestros momentos favoritos</p>
+            </div>
+          </div>
+          <div class="book-float-card">
+            <span>01</span>
+            <strong>Su historia</strong>
+            <small>en un enlace privado</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section steps" id="como-comprar">
+      <div class="container">
+        <div class="section-head section-head--center">
+          <div>
+            <p class="eyebrow">Así de fácil</p>
+            <h2>De la idea al regalo en tres pasos.</h2>
+          </div>
+        </div>
+        <div class="steps-grid">
+          <article class="step-card" data-reveal>
+            <span class="step-number">1</span>
+            <h3>Elige y personaliza</h3>
+            <p>Selecciona el producto, el tamaño y escribe los nombres, la fecha o el mensaje. Verás el total estimado al instante.</p>
+          </article>
+          <article class="step-card" data-reveal>
+            <span class="step-number">2</span>
+            <h3>Envía el pedido</h3>
+            <p>El botón de WhatsApp arma el mensaje con todos los detalles. Ahí mismo coordinamos las fotos y la fecha de entrega.</p>
+          </article>
+          <article class="step-card" data-reveal>
+            <span class="step-number">3</span>
+            <h3>Paga y recibe</h3>
+            <p>Aceptamos transferencia y pago con QR. Te confirmamos el diseño y coordinamos entrega o envío.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" id="preguntas">
+      <div class="container faq-grid">
+        <div class="faq-intro">
+          <p class="eyebrow">Antes de pedir</p>
+          <h2>Preguntas que quizá tengas.</h2>
+          <p>Si no encuentras lo que buscas, escríbenos por WhatsApp. Con gusto te ayudamos a armar algo único.</p>
+          <a class="text-link" href="#contacto">Hablar con Milo <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="faq-list" data-reveal>
+          <details>
+            <summary>¿Cómo envío las fotos?</summary>
+            <p>Después de confirmar el pedido por WhatsApp te indicamos cómo enviarlas. Para productos físicos necesitamos las fotos antes de empezar; para el libro digital coordinamos todo por el mismo chat.</p>
+          </details>
+          <details>
+            <summary>¿Cuánto tarda un pedido?</summary>
+            <p>Los productos físicos tardan entre 3 y 8 días hábiles según el detalle. El libro digital se entrega en 48 a 72 horas después de recibir las fotos y los textos.</p>
+          </details>
+          <details>
+            <summary>¿Hacen envíos a todo el país?</summary>
+            <p>Sí, coordinamos entrega en Bolivia. El costo y la forma de envío dependen de la zona; lo confirmamos por WhatsApp antes de cerrar el pedido.</p>
+          </details>
+          <details>
+            <summary>¿Cómo puedo pagar?</summary>
+            <p>Aceptamos transferencia bancaria y pago con QR. Te compartimos los datos y el total confirmado antes de realizar el pago.</p>
+          </details>
+          <details>
+            <summary>¿Puedo pedir algo que no está en el catálogo?</summary>
+            <p>Claro. Escríbenos con tu idea, la fecha y el presupuesto. Si podemos hacerlo, te proponemos un diseño y te damos el precio.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contacto">
+      <div class="container">
+        <div class="contact-card" data-reveal>
+          <div>
+            <p class="eyebrow">Hagamos algo especial</p>
+            <h2>¿Tienes una idea en mente?</h2>
+            <p>Cuéntanos para quién es, qué quieres regalar y para cuándo lo necesitas. Te respondemos con una propuesta.</p>
+          </div>
+          <div class="contact-actions">
+            <a class="btn btn-light" id="contact-whatsapp" href="#" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+            <span class="contact-note">Transferencia · QR · Entrega digital</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand--footer" href="#inicio">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M16 27s-9.5-5.7-9.5-12.2A5.3 5.3 0 0 1 16 10.1a5.3 5.3 0 0 1 9.5 4.7C25.5 21.3 16 27 16 27Z" fill="currentColor"/>
+              <path d="M9 6.5c2.8 0 5.2 1.4 7 4.1 1.8-2.7 4.2-4.1 7-4.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="brand-text"><strong>Milo</strong><small>Creaciones</small></span>
+        </a>
+        <p>Regalos personalizados para parejas, familias y personas que guardan los detalles.</p>
+        <span class="footer-location">Bolivia</span>
+      </div>
+      <div class="footer-col">
+        <h3>Explorar</h3>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#libro-digital">Libro digital</a>
+        <a href="#como-comprar">Cómo comprar</a>
+        <a href="#preguntas">Preguntas frecuentes</a>
+      </div>
+      <div class="footer-col">
+        <h3>Productos</h3>
+        <a href="#catalogo" data-category-jump="cajitas">Cajitas</a>
+        <a href="#catalogo" data-category-jump="carteles">Carteles</a>
+        <a href="#catalogo" data-category-jump="peluches">Peluches</a>
+        <a href="#catalogo" data-category-jump="libros">Libros digitales</a>
+      </div>
+      <div class="footer-col">
+        <h3>Contacto</h3>
+        <a id="footer-whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <span id="footer-email-wrap" hidden><a id="footer-email" href="#"></a></span>
+        <span id="footer-instagram-wrap" hidden><a id="footer-instagram" href="#" target="_blank" rel="noopener">Instagram</a></span>
+        <span class="footer-payment">Transferencia · QR</span>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; <span id="current-year"></span> Creaciones Milo. Todos los derechos reservados.</p>
+      <p>Hecho con cariño en Bolivia.</p>
+    </div>
+  </footer>
+
+  <dialog class="product-dialog" id="product-dialog" aria-labelledby="product-dialog-title">
+    <div class="dialog-shell" id="dialog-content"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <a class="whatsapp-float" id="whatsapp-float" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-3.3A8.5 8.5 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M9 8.5c.4-.1.8.1 1 .5l.6 1.2c.1.3.1.6-.1.8l-.5.6c.5 1.1 1.4 2 2.5 2.5l.6-.5c.2-.2.5-.2.8-.1l1.2.6c.4.2.6.6.5 1-.2 1-1.1 1.7-2.1 1.7-2.9 0-5.3-2.4-5.3-5.3 0-1 .7-1.9 1.7-2.1Z" fill="currentColor"/>
+    </svg>
+    <span>WhatsApp</span>
+  </a>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
