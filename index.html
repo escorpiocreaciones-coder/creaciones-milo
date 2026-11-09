@@ -5,18 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Creaciones Milo | Regalos personalizados para parejas</title>
   <meta name="description" content="Cajitas, carteles, peluches y libros digitales personalizados para parejas. Diseños hechos a mano en Bolivia y pedidos por WhatsApp.">
-  <meta name="theme-color" content="#f4efe3">
+  <meta id="theme-color" name="theme-color" content="#f8f1e7">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap">
+  <link id="theme-fonts" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300..800&display=swap" rel="stylesheet">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Creaciones Milo | Regalos personalizados">
   <meta property="og:description" content="Cajitas, carteles, peluches y libros digitales para regalar historias.">
   <meta property="og:locale" content="es_CR">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/brutalist.css">
+  <link id="theme-css" rel="stylesheet" href="css/romantic.css">
+  <script>
+    (function () {
+      if (new URLSearchParams(window.location.search).get('tema') !== 'brutal') return;
+      document.getElementById('theme-css').href = 'css/brutalist.css';
+      document.getElementById('theme-fonts').href = 'https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&display=swap';
+      document.getElementById('theme-color').setAttribute('content', '#f4efe3');
+    })();
+  </script>
   <!-- Google Analytics: reemplaza G-XXXXXXXXXX con tu ID de medición -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
